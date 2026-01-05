@@ -168,9 +168,12 @@ class ModeSelectionScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(
-                            title,
-                            style: AppTextStyles.h3.copyWith(color: Colors.white),
+                          Flexible(
+                            child: Text(
+                              title,
+                              style: AppTextStyles.h3.copyWith(color: Colors.white),
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           if (comingSoon) ...[
                             const SizedBox(width: 8),

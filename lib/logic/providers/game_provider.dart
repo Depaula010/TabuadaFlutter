@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../../data/models/question.dart';
 import '../../data/models/game_progress.dart';
+import '../../data/services/audio_service.dart';
 import '../game_engine/question_generator.dart';
 import '../../data/services/hive_service.dart';
 
@@ -86,6 +87,9 @@ class GameProvider extends ChangeNotifier {
     // Gera as questões
     _questions = _questionGenerator.generateQuestionSet(tableNumber, questionCount);
 
+    // Inicia música de fundo
+    AudioService().playBackgroundMusic();
+
     // Configura timer para Time Attack
     if (_mode == GameMode.timeAttack) {
       _remainingSeconds = 60;
@@ -130,6 +134,9 @@ class GameProvider extends ChangeNotifier {
     _score += _calculatePoints();
     _currentProgress?.recordCorrectAnswer();
 
+    // Toca som de acerto
+    AudioService().playCorrectSound();
+
     // Verifica troféu de 10 acertos seguidos
     if (_consecutiveCorrect >= 10) {
       HiveService.unlockTrophy('perfect_10');
@@ -143,6 +150,10 @@ class GameProvider extends ChangeNotifier {
     _wrongCount++;
     _consecutiveCorrect = 0; // Reseta sequência
     _currentProgress?.recordWrongAnswer();
+    
+    // Toca som de erro
+    AudioService().playWrongSound();
+    
     notifyListeners();
   }
 
@@ -165,6 +176,9 @@ class GameProvider extends ChangeNotifier {
   Future<void> _finishGame() async {
     _state = GameState.finished;
     _gameTimer?.cancel();
+
+    // Para música de fundo
+    AudioService().stopBackgroundMusic();
 
     // Salva progresso
     if (_currentProgress != null) {
@@ -196,6 +210,10 @@ class GameProvider extends ChangeNotifier {
     if (_state == GameState.playing) {
       _state = GameState.paused;
       _gameTimer?.cancel();
+      
+      // Pausa música de fundo
+      AudioService().pauseBackgroundMusic();
+      
       notifyListeners();
     }
   }
@@ -204,6 +222,10 @@ class GameProvider extends ChangeNotifier {
   void resumeGame() {
     if (_state == GameState.paused) {
       _state = GameState.playing;
+      
+      // Resume música de fundo
+      AudioService().resumeBackgroundMusic();
+      
       if (_mode == GameMode.timeAttack) {
         _startTimer();
       }

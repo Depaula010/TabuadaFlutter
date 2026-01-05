@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/utils/parental_gate.dart';
+import '../../data/services/audio_service.dart';
 import '../../logic/providers/progress_provider.dart';
 import '../widgets/custom_button.dart';
 import 'mode_selection_screen.dart';
@@ -152,7 +153,9 @@ class HomeScreen extends StatelessWidget {
       children: [
         CustomButton(
           text: 'JOGAR',
-          onPressed: () {
+          onPressed: () async {
+            // Desbloqueia áudio no Chrome/web
+            await AudioService().unlockAudio();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const ModeSelectionScreen()),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:confetti/confetti.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/utils/haptic_helper.dart';
+import '../../data/services/audio_service.dart';
 import '../../logic/providers/game_provider.dart';
 import '../widgets/answer_option.dart';
 import 'result_screen.dart';
@@ -19,7 +19,6 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen>
     with SingleTickerProviderStateMixin {
-  late ConfettiController _confettiController;
   late AnimationController _feedbackController;
   bool _showingFeedback = false;
   bool _lastAnswerCorrect = false;
@@ -27,7 +26,6 @@ class _GameScreenState extends State<GameScreen>
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
     _feedbackController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -36,7 +34,6 @@ class _GameScreenState extends State<GameScreen>
 
   @override
   void dispose() {
-    _confettiController.dispose();
     _feedbackController.dispose();
     super.dispose();
   }
@@ -54,7 +51,6 @@ class _GameScreenState extends State<GameScreen>
 
     if (isCorrect) {
       HapticHelper.success();
-      _confettiController.play();
       _feedbackController.forward().then((_) => _feedbackController.reverse());
     } else {
       HapticHelper.error();
@@ -106,6 +102,9 @@ class _GameScreenState extends State<GameScreen>
 
         if (shouldExit == false) {
           gameProvider.resumeGame();
+        } else if (shouldExit == true) {
+          // Para a música completamente ao sair
+          AudioService().stopBackgroundMusic();
         }
 
         return shouldExit ?? false;
@@ -171,25 +170,6 @@ class _GameScreenState extends State<GameScreen>
                       },
                     ),
                   ),
-                ],
-              ),
-            ),
-
-            // Confetti para respostas corretas
-            Align(
-              alignment: Alignment.topCenter,
-              child: ConfettiWidget(
-                confettiController: _confettiController,
-                blastDirectionality: BlastDirectionality.explosive,
-                emissionFrequency: 0.05,
-                numberOfParticles: 20,
-                maxBlastForce: 30,
-                minBlastForce: 15,
-                colors: const [
-                  AppColors.primary,
-                  AppColors.secondary,
-                  AppColors.accent,
-                  AppColors.success,
                 ],
               ),
             ),
