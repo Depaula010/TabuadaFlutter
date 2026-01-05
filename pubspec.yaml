@@ -1,0 +1,51 @@
+name: mestres_do_calculo
+description: App educativo de tabuada para crianças de 6 a 12 anos.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Gerenciamento de Estado
+  provider: ^6.1.1
+  
+  # Persistência Local
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.1
+  
+  # Áudio
+  audioplayers: ^5.2.1
+  
+  # Animações
+  lottie: ^2.7.0
+  confetti: ^0.7.0
+  
+  # Feedback Tátil
+  vibration: ^1.8.4
+  
+  # UI
+  google_fonts: ^6.1.0
+  flutter_animate: ^4.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.7
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/images/character/
+    - assets/images/backgrounds/
+    - assets/sounds/music/
+    - assets/sounds/sfx/
+    - assets/animations/lottie/
