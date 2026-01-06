@@ -20,7 +20,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController _feedbackController;
-  late GameProvider _gameProvider; // Armazena referência para evitar context.read no dispose
+  GameProvider? _gameProvider; // Nullable para evitar LateInitializationError
   bool _showingFeedback = false;
   bool _lastAnswerCorrect = false;
 
@@ -30,22 +30,22 @@ class _GameScreenState extends State<GameScreen>
     // Registra observador do ciclo de vida do app
     WidgetsBinding.instance.addObserver(this);
     
-    // Guarda referência ao provider (importante para o dispose)
-    _gameProvider = context.read<GameProvider>();
-    
-    // Escuta mudanças de estado do jogo (ex: tempo acabou)
-    _gameProvider.addListener(_onGameStateChanged);
-    
     _feedbackController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
+    
+    // Aguarda o próximo frame para garantir que o context está disponível
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _gameProvider = context.read<GameProvider>();
+      _gameProvider!.addListener(_onGameStateChanged);
+    });
   }
 
   @override
   void dispose() {
-    // Remove listener usando a referência guardada (evita erro de widget desativado)
-    _gameProvider.removeListener(_onGameStateChanged);
+    // Remove listener se foi inicializado
+    _gameProvider?.removeListener(_onGameStateChanged);
     
     // Remove observador do ciclo de vida
     WidgetsBinding.instance.removeObserver(this);
@@ -55,8 +55,10 @@ class _GameScreenState extends State<GameScreen>
 
   /// Navega para resultados quando o jogo termina (ex: timer do Time Attack)
   void _onGameStateChanged() {
+    if (_gameProvider == null) return;
+    
     // Se o jogo acabou E não estamos mostrando feedback de clique
-    if (_gameProvider.state == GameState.finished && !_showingFeedback && mounted) {
+    if (_gameProvider!.state == GameState.finished && !_showingFeedback && mounted) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const ResultScreen()),
@@ -79,7 +81,8 @@ class _GameScreenState extends State<GameScreen>
     if (_showingFeedback) return;
 
     // Resposta instantânea - feedback visual imediato
-    final isCorrect = await _gameProvider.submitAnswer(answer);
+    if (_gameProvider == null) return;
+    final isCorrect = await _gameProvider!.submitAnswer(answer);
 
     setState(() {
       _showingFeedback = true;
@@ -96,21 +99,14 @@ class _GameScreenState extends State<GameScreen>
     // Aguarda a animação (pergunta antiga permanece visível)
     await Future.delayed(const Duration(milliseconds: 800));
 
-    if (mounted) {
+    if (mounted && _gameProvider != null) {
       setState(() {
         _showingFeedback = false;
       });
 
-      // Avança para próxima questão ou finaliza (após a animação)
-      await _gameProvider.moveToNextQuestion();
-      
-      // Verifica se o jogo terminou
-      if (_gameProvider.state == GameState.finished) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const ResultScreen()),
-        );
-      }
+      // Avança para próxima questão ou finaliza
+      // O listener _onGameStateChanged cuidará da navegação
+      await _gameProvider!.moveToNextQuestion();
     }
   }
 
