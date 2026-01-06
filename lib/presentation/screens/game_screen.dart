@@ -20,6 +20,7 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController _feedbackController;
+  late GameProvider _gameProvider; // Armazena referência para evitar context.read no dispose
   bool _showingFeedback = false;
   bool _lastAnswerCorrect = false;
 
@@ -29,8 +30,11 @@ class _GameScreenState extends State<GameScreen>
     // Registra observador do ciclo de vida do app
     WidgetsBinding.instance.addObserver(this);
     
+    // Guarda referência ao provider (importante para o dispose)
+    _gameProvider = context.read<GameProvider>();
+    
     // Escuta mudanças de estado do jogo (ex: tempo acabou)
-    context.read<GameProvider>().addListener(_onGameStateChanged);
+    _gameProvider.addListener(_onGameStateChanged);
     
     _feedbackController = AnimationController(
       vsync: this,
@@ -40,8 +44,8 @@ class _GameScreenState extends State<GameScreen>
 
   @override
   void dispose() {
-    // Remove listener do GameProvider
-    context.read<GameProvider>().removeListener(_onGameStateChanged);
+    // Remove listener usando a referência guardada (evita erro de widget desativado)
+    _gameProvider.removeListener(_onGameStateChanged);
     
     // Remove observador do ciclo de vida
     WidgetsBinding.instance.removeObserver(this);
@@ -51,10 +55,8 @@ class _GameScreenState extends State<GameScreen>
 
   /// Navega para resultados quando o jogo termina (ex: timer do Time Attack)
   void _onGameStateChanged() {
-    final provider = context.read<GameProvider>();
-    
     // Se o jogo acabou E não estamos mostrando feedback de clique
-    if (provider.state == GameState.finished && !_showingFeedback && mounted) {
+    if (_gameProvider.state == GameState.finished && !_showingFeedback && mounted) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const ResultScreen()),
@@ -76,8 +78,8 @@ class _GameScreenState extends State<GameScreen>
   Future<void> _handleAnswer(BuildContext context, int answer) async {
     if (_showingFeedback) return;
 
-    final gameProvider = context.read<GameProvider>();
-    final isCorrect = await gameProvider.submitAnswer(answer);
+    // Resposta instantânea - feedback visual imediato
+    final isCorrect = await _gameProvider.submitAnswer(answer);
 
     setState(() {
       _showingFeedback = true;
@@ -91,6 +93,7 @@ class _GameScreenState extends State<GameScreen>
       HapticHelper.error();
     }
 
+    // Aguarda a animação (pergunta antiga permanece visível)
     await Future.delayed(const Duration(milliseconds: 800));
 
     if (mounted) {
@@ -98,8 +101,11 @@ class _GameScreenState extends State<GameScreen>
         _showingFeedback = false;
       });
 
+      // Avança para próxima questão ou finaliza (após a animação)
+      await _gameProvider.moveToNextQuestion();
+      
       // Verifica se o jogo terminou
-      if (gameProvider.state == GameState.finished) {
+      if (_gameProvider.state == GameState.finished) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const ResultScreen()),

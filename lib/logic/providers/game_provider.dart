@@ -119,18 +119,18 @@ class GameProvider extends ChangeNotifier {
       _handleWrongAnswer();
     }
 
-    // Aguarda um breve momento para feedback visual
-    await Future.delayed(const Duration(milliseconds: 800));
+    // Retorna imediatamente - a UI controla o tempo de espera da animação
+    return isCorrect;
+  }
 
-    // Avança para próxima questão ou finaliza
+  /// Avança para a próxima questão (chamado pela UI após animação)
+  Future<void> moveToNextQuestion() async {
     if (!isLastQuestion) {
       _currentQuestionIndex++;
       notifyListeners();
     } else {
       await _finishGame();
     }
-
-    return isCorrect;
   }
 
   /// Processa resposta correta
