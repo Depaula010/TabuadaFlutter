@@ -28,6 +28,10 @@ class _GameScreenState extends State<GameScreen>
     super.initState();
     // Registra observador do ciclo de vida do app
     WidgetsBinding.instance.addObserver(this);
+    
+    // Escuta mudanças de estado do jogo (ex: tempo acabou)
+    context.read<GameProvider>().addListener(_onGameStateChanged);
+    
     _feedbackController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -36,10 +40,26 @@ class _GameScreenState extends State<GameScreen>
 
   @override
   void dispose() {
+    // Remove listener do GameProvider
+    context.read<GameProvider>().removeListener(_onGameStateChanged);
+    
     // Remove observador do ciclo de vida
     WidgetsBinding.instance.removeObserver(this);
     _feedbackController.dispose();
     super.dispose();
+  }
+
+  /// Navega para resultados quando o jogo termina (ex: timer do Time Attack)
+  void _onGameStateChanged() {
+    final provider = context.read<GameProvider>();
+    
+    // Se o jogo acabou E não estamos mostrando feedback de clique
+    if (provider.state == GameState.finished && !_showingFeedback && mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const ResultScreen()),
+      );
+    }
   }
 
   /// Pausa automaticamente o jogo quando o app é minimizado
