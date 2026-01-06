@@ -75,8 +75,11 @@ class _GameScreenState extends State<GameScreen>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        
         final gameProvider = context.read<GameProvider>();
         gameProvider.pauseGame();
         
@@ -105,9 +108,10 @@ class _GameScreenState extends State<GameScreen>
         } else if (shouldExit == true) {
           // Para a música completamente ao sair
           AudioService().stopBackgroundMusic();
+          if (context.mounted) {
+            Navigator.of(context).pop();
+          }
         }
-
-        return shouldExit ?? false;
       },
       child: Scaffold(
         body: Stack(
@@ -253,18 +257,24 @@ class _GameScreenState extends State<GameScreen>
                               Icon(
                                 Icons.timer,
                                 size: 16,
-                                color: provider.remainingSeconds <= 10
+                                color: provider.isTimeCritical
                                     ? AppColors.error
                                     : AppColors.primary,
                               ),
                               const SizedBox(width: 4),
-                              Text(
-                                '${provider.remainingSeconds}s',
+                              AnimatedDefaultTextStyle(
+                                duration: const Duration(milliseconds: 100),
                                 style: AppTextStyles.caption.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: provider.remainingSeconds <= 10
+                                  fontSize: provider.isTimeCritical ? 16 : 14,
+                                  color: provider.isTimeCritical
                                       ? AppColors.error
                                       : AppColors.primary,
+                                ),
+                                child: Text(
+                                  provider.isTimeCritical
+                                      ? '${provider.remainingSeconds}.${provider.remainingTenths}s'
+                                      : '${provider.remainingSeconds}s',
                                 ),
                               ),
                             ],
@@ -276,10 +286,12 @@ class _GameScreenState extends State<GameScreen>
                       borderRadius: BorderRadius.circular(10),
                       child: LinearProgressIndicator(
                         value: provider.mode == GameMode.timeAttack
-                            ? provider.remainingSeconds / 60
+                            ? provider.remainingMilliseconds / 60000
                             : provider.progress,
                         backgroundColor: Colors.white.withOpacity(0.3),
-                        color: AppColors.secondary,
+                        color: provider.isTimeCritical 
+                            ? AppColors.error 
+                            : AppColors.secondary,
                         minHeight: 10,
                       ),
                     ),

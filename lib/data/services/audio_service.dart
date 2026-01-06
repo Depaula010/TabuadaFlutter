@@ -103,7 +103,7 @@ class AudioService {
   Future<void> playCoinSound() async {
     try {
       await _sfxPlayer.stop();
-      await _sfxPlayer.play(AssetSource('sounds/sfx/success.mp3'));
+      await _sfxPlayer.play(AssetSource('sounds/sfx/coin.mp3'));
     } catch (e) {
       print('Erro ao tocar SFX: $e');
     }
@@ -113,7 +113,7 @@ class AudioService {
   Future<void> playTrophyUnlockedSound() async {
     try {
       await _sfxPlayer.stop();
-      await _sfxPlayer.play(AssetSource('sounds/sfx/success.mp3'));
+      await _sfxPlayer.play(AssetSource('sounds/sfx/trophy.mp3'));
     } catch (e) {
       print('Erro ao tocar SFX: $e');
     }

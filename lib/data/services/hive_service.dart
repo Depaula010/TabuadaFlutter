@@ -83,6 +83,8 @@ class HiveService {
     final trophy = _trophiesBox.get(trophyId);
     if (trophy != null && !trophy.isUnlocked) {
       trophy.unlock();
+      // IMPORTANTE: Salva o troféu no disco para persistência
+      await _trophiesBox.put(trophyId, trophy);
     }
   }
 

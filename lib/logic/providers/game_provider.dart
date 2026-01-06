@@ -42,7 +42,7 @@ class GameProvider extends ChangeNotifier {
 
   // Timer (para Time Attack)
   Timer? _gameTimer;
-  int _remainingSeconds = 60;
+  int _remainingMilliseconds = 60000; // 60 segundos em milissegundos
 
   // Progresso persistente
   GameProgress? _currentProgress;
@@ -58,7 +58,13 @@ class GameProvider extends ChangeNotifier {
   int get score => _score;
   int get correctCount => _correctCount;
   int get wrongCount => _wrongCount;
-  int get remainingSeconds => _remainingSeconds;
+  
+  // Timer getters
+  int get remainingSeconds => (_remainingMilliseconds / 1000).ceil();
+  int get remainingTenths => ((_remainingMilliseconds % 1000) / 100).floor();
+  int get remainingMilliseconds => _remainingMilliseconds;
+  bool get isTimeCritical => _remainingMilliseconds <= 10000; // Últimos 10 segundos
+  
   double get progress => totalQuestions > 0 ? currentQuestionNumber / totalQuestions : 0.0;
   bool get isLastQuestion => _currentQuestionIndex >= _questions.length - 1;
 
@@ -92,7 +98,7 @@ class GameProvider extends ChangeNotifier {
 
     // Configura timer para Time Attack
     if (_mode == GameMode.timeAttack) {
-      _remainingSeconds = 60;
+      _remainingMilliseconds = 60000; // 60 segundos
       _startTimer();
     }
 
@@ -248,9 +254,10 @@ class GameProvider extends ChangeNotifier {
 
   void _startTimer() {
     _gameTimer?.cancel();
-    _gameTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingSeconds > 0) {
-        _remainingSeconds--;
+    // Atualiza a cada 100ms para mostrar décimos de segundo
+    _gameTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if (_remainingMilliseconds > 0) {
+        _remainingMilliseconds -= 100;
         notifyListeners();
       } else {
         _finishGame();

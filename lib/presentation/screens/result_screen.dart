@@ -4,9 +4,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:confetti/confetti.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
+import '../../data/services/audio_service.dart';
 import '../../logic/providers/game_provider.dart';
 import '../../logic/providers/progress_provider.dart';
 import '../widgets/custom_button.dart';
+import 'mode_selection_screen.dart';
 
 /// Tela de resultados após o jogo
 class ResultScreen extends StatefulWidget {
@@ -24,10 +26,12 @@ class _ResultScreenState extends State<ResultScreen> {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 3));
     
-    // Trigger confetti se teve bom desempenho
+    // Trigger confetti e som se teve bom desempenho
     final gameProvider = context.read<GameProvider>();
     if (gameProvider.wrongCount == 0) {
       _confettiController.play();
+      // Toca som de vitória/troféu
+      AudioService().playTrophyUnlockedSound();
     }
 
     // Recarrega o progresso
@@ -42,10 +46,11 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
         Navigator.of(context).popUntil((route) => route.isFirst);
-        return false;
       },
       child: Scaffold(
         body: Stack(
@@ -293,8 +298,14 @@ class _ResultScreenState extends State<ResultScreen> {
           CustomButton(
             text: 'JOGAR NOVAMENTE',
             onPressed: () {
-              provider.restartGame();
-              Navigator.pop(context);
+              // Volta para a tela de seleção de modo
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const ModeSelectionScreen(),
+                ),
+              );
             },
             gradient: AppColors.primaryGradient,
             icon: Icons.replay,
