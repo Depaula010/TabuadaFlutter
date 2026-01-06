@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       // Personagem mascote
                       Container(
-                        height: 180,
+                        height: 220,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           boxShadow: [

@@ -4,9 +4,9 @@ import 'app_colors.dart';
 
 /// Estilos de texto otimizados para leitura infantil
 class AppTextStyles {
-  // Sombra suave para garantir leitura em fundos coloridos
+  // Sombra mais forte para garantir leitura em fundos coloridos
   static const List<Shadow> _textShadow = [
-    Shadow(color: Colors.black26, blurRadius: 2, offset: Offset(1, 1)),
+    Shadow(color: Colors.black45, blurRadius: 4, offset: Offset(1, 2)),
   ];
 
   // Fonte base (Poppins é amigável e legível para crianças)
