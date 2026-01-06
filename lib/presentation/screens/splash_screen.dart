@@ -22,13 +22,15 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initAndNavigate() async {
-    // Inicializa serviços em paralelo com a animação
-    await Future.wait([
-      HiveService.init(),
-      AudioService().init(),
-      // Tempo mínimo para exibir a animação
-      Future.delayed(const Duration(seconds: 2)),
-    ]);
+    // Inicia timer mínimo da animação
+    final minDelay = Future.delayed(const Duration(seconds: 2));
+    
+    // Inicializa serviços em ordem (Audio depende de Hive)
+    await HiveService.init();
+    await AudioService().init();
+    
+    // Aguarda tempo mínimo da animação
+    await minDelay;
 
     if (mounted) {
       Navigator.of(context).pushReplacement(
