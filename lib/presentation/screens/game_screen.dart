@@ -18,7 +18,7 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController _feedbackController;
   bool _showingFeedback = false;
   bool _lastAnswerCorrect = false;
@@ -26,6 +26,8 @@ class _GameScreenState extends State<GameScreen>
   @override
   void initState() {
     super.initState();
+    // Registra observador do ciclo de vida do app
+    WidgetsBinding.instance.addObserver(this);
     _feedbackController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -34,8 +36,21 @@ class _GameScreenState extends State<GameScreen>
 
   @override
   void dispose() {
+    // Remove observador do ciclo de vida
+    WidgetsBinding.instance.removeObserver(this);
     _feedbackController.dispose();
     super.dispose();
+  }
+
+  /// Pausa automaticamente o jogo quando o app é minimizado
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      final gameProvider = context.read<GameProvider>();
+      if (gameProvider.state == GameState.playing) {
+        gameProvider.pauseGame();
+      }
+    }
   }
 
   Future<void> _handleAnswer(BuildContext context, int answer) async {

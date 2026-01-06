@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
+import '../../data/services/hive_service.dart';
+import '../../data/services/audio_service.dart';
 import 'home_screen.dart';
 
 /// Tela de splash com animação de entrada
@@ -16,12 +18,17 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateToHome();
+    _initAndNavigate();
   }
 
-  Future<void> _navigateToHome() async {
-    // Aguarda 3 segundos para exibir a animação
-    await Future.delayed(const Duration(seconds: 3));
+  Future<void> _initAndNavigate() async {
+    // Inicializa serviços em paralelo com a animação
+    await Future.wait([
+      HiveService.init(),
+      AudioService().init(),
+      // Tempo mínimo para exibir a animação
+      Future.delayed(const Duration(seconds: 2)),
+    ]);
 
     if (mounted) {
       Navigator.of(context).pushReplacement(

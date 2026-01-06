@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'data/services/hive_service.dart';
-import 'data/services/audio_service.dart';
 import 'logic/providers/game_provider.dart';
 import 'logic/providers/progress_provider.dart';
 import 'presentation/screens/splash_screen.dart';
@@ -18,12 +16,6 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  // Inicializa o Hive (banco de dados local)
-  await HiveService.init();
-
-  // Inicializa o serviço de áudio (pré-carrega sons)
-  await AudioService().init();
-
   // Configura a barra de status e navegação
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -34,6 +26,7 @@ void main() async {
     ),
   );
 
+  // Inicialização de Hive e Audio ocorre no SplashScreen
   runApp(const MestresDoCalculo());
 }
 

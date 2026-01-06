@@ -245,9 +245,22 @@ class ModeSelectionScreen extends StatelessWidget {
                     onPressed: comingSoon
                         ? () {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Este modo estará disponível em breve!'),
-                                duration: Duration(seconds: 2),
+                              SnackBar(
+                                content: Row(
+                                  children: const [
+                                    Icon(Icons.construction, color: Colors.white),
+                                    SizedBox(width: 12),
+                                    Flexible(
+                                      child: Text('Este modo estará disponível em breve!'),
+                                    ),
+                                  ],
+                                ),
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: gradient.colors.first,
+                                duration: const Duration(seconds: 2),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
                               ),
                             );
                           }

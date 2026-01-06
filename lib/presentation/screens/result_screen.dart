@@ -26,13 +26,23 @@ class _ResultScreenState extends State<ResultScreen> {
     super.initState();
     _confettiController = ConfettiController(duration: const Duration(seconds: 3));
     
-    // Trigger confetti e som se teve bom desempenho
+    // Calcula precisão
     final gameProvider = context.read<GameProvider>();
+    final accuracy = gameProvider.totalQuestions > 0
+        ? (gameProvider.correctCount / gameProvider.totalQuestions)
+        : 0.0;
+
+    // Celebração graduada baseada na precisão
     if (gameProvider.wrongCount == 0) {
+      // 100% - Explosão total + som de troféu
       _confettiController.play();
-      // Toca som de vitória/troféu
       AudioService().playTrophyUnlockedSound();
+    } else if (accuracy >= 0.8) {
+      // 80-99% - Confetti menor + som de sucesso
+      _confettiController.play();
+      AudioService().playCorrectSound();
     }
+    // Abaixo de 80% - sem confetti, apenas feedback visual
 
     // Recarrega o progresso
     context.read<ProgressProvider>().loadProgress();
@@ -103,9 +113,8 @@ class _ResultScreenState extends State<ResultScreen> {
 
                               const SizedBox(height: 20),
 
-                              // Estrelas conquistadas (se aplicável)
-                              if (gameProvider.mode == GameMode.training)
-                                _buildStarsDisplay(accuracy),
+                              // Estrelas conquistadas (ambos os modos)
+                              _buildStarsDisplay(accuracy),
 
                               const SizedBox(height: 30),
                             ],
