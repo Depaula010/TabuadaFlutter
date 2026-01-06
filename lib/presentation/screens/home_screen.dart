@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/utils/parental_gate.dart';
@@ -37,15 +38,27 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Placeholder para personagem (usar asset real depois)
-                      Icon(
-                        Icons.emoji_events,
-                        size: 140,
-                        color: AppColors.secondary,
-                      )
-                          .animate(onPlay: (controller) => controller.repeat())
-                          .shimmer(duration: 2000.ms, color: AppColors.secondaryLight)
-                          .shake(hz: 0.5, curve: Curves.easeInOut),
+                      // Personagem mascote
+                      Container(
+                        height: 180,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 20,
+                              spreadRadius: 5,
+                            ),
+                          ],
+                        ),
+                        child: Image.asset(AppAssets.characterHappy)
+                            .animate(onPlay: (controller) => controller.repeat(reverse: true))
+                            .scale(
+                              duration: 2.seconds,
+                              begin: const Offset(1, 1),
+                              end: const Offset(1.05, 1.05),
+                            ),
+                      ),
 
                       const SizedBox(height: 24),
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/utils/haptic_helper.dart';
@@ -77,12 +78,22 @@ class _GameScreenState extends State<GameScreen>
     }
   }
 
+  /// Retorna a imagem do personagem baseada no estado atual
+  String get _characterImage {
+    if (_showingFeedback) {
+      return _lastAnswerCorrect 
+          ? AppAssets.characterExcited 
+          : AppAssets.characterSad;
+    }
+    return AppAssets.characterHappy;
+  }
+
   Future<void> _handleAnswer(BuildContext context, int answer) async {
     if (_showingFeedback) return;
 
-    // Resposta instantânea - feedback visual imediato
-    if (_gameProvider == null) return;
-    final isCorrect = await _gameProvider!.submitAnswer(answer);
+    // Usa context.read diretamente para garantir provider correto
+    final gameProvider = context.read<GameProvider>();
+    final isCorrect = await gameProvider.submitAnswer(answer);
 
     setState(() {
       _showingFeedback = true;
@@ -91,10 +102,12 @@ class _GameScreenState extends State<GameScreen>
 
     if (isCorrect) {
       HapticHelper.success();
-      _feedbackController.forward().then((_) => _feedbackController.reverse());
     } else {
       HapticHelper.error();
     }
+    
+    // Animação do ícone (acerto e erro)
+    _feedbackController.forward().then((_) => _feedbackController.reverse());
 
     // Aguarda a animação (pergunta antiga permanece visível)
     await Future.delayed(const Duration(milliseconds: 800));
@@ -197,7 +210,23 @@ class _GameScreenState extends State<GameScreen>
                             // Pontuação atual
                             _buildScoreDisplay(provider),
 
-                            const SizedBox(height: 40),
+                            const SizedBox(height: 20),
+
+                            // Personagem reativo
+                            SizedBox(
+                              height: 120,
+                              child: Image.asset(
+                                _characterImage,
+                                key: ValueKey(_characterImage),
+                              ).animate(
+                                key: ValueKey(_characterImage),
+                              ).scale(
+                                duration: 300.ms,
+                                curve: Curves.easeOutBack,
+                              ),
+                            ),
+
+                            const SizedBox(height: 20),
 
                             // Questão
                             _buildQuestionDisplay(question.questionText),

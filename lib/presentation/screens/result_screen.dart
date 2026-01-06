@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:confetti/confetti.dart';
+import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../data/services/audio_service.dart';
@@ -95,7 +96,22 @@ class _ResultScreenState extends State<ResultScreen> {
                         textAlign: TextAlign.center,
                       ).animate().fadeIn(duration: 600.ms).scale(),
 
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 20),
+
+                      // Personagem celebrando
+                      Image.asset(
+                        accuracy >= 70 
+                            ? AppAssets.characterExcited 
+                            : AppAssets.characterHappy,
+                        height: 150,
+                      ).animate().slideY(
+                        begin: 0.5, 
+                        end: 0, 
+                        duration: 600.ms, 
+                        curve: Curves.easeOutBack,
+                      ),
+
+                      const SizedBox(height: 20),
 
                       // Cards de estatísticas
                       Expanded(

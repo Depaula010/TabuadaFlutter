@@ -82,6 +82,13 @@ class _CustomButtonState extends State<CustomButton>
                   )
                 : widget.gradient,
             borderRadius: BorderRadius.circular(widget.isSecondary ? 16 : 20),
+            // Efeito 3D - borda inferior mais escura
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.black.withOpacity(0.3),
+                width: widget.isSecondary ? 3 : 4,
+              ),
+            ),
             boxShadow: [
               BoxShadow(
                 color: widget.isDisabled

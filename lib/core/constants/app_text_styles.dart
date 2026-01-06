@@ -4,7 +4,12 @@ import 'app_colors.dart';
 
 /// Estilos de texto otimizados para leitura infantil
 class AppTextStyles {
-  // Fonte base (Roboto é amigável e legível para crianças)
+  // Sombra suave para garantir leitura em fundos coloridos
+  static const List<Shadow> _textShadow = [
+    Shadow(color: Colors.black26, blurRadius: 2, offset: Offset(1, 1)),
+  ];
+
+  // Fonte base (Poppins é amigável e legível para crianças)
   static TextStyle get _baseStyle => GoogleFonts.poppins(
         color: AppColors.textPrimary,
       );
@@ -14,6 +19,7 @@ class AppTextStyles {
         fontSize: 40,
         fontWeight: FontWeight.bold,
         height: 1.2,
+        shadows: _textShadow,
       );
 
   // Títulos médios (Seções)
@@ -21,6 +27,7 @@ class AppTextStyles {
         fontSize: 32,
         fontWeight: FontWeight.bold,
         height: 1.3,
+        shadows: _textShadow,
       );
 
   // Títulos pequenos (Cards)
@@ -58,6 +65,7 @@ class AppTextStyles {
         fontSize: 20,
         fontWeight: FontWeight.bold,
         letterSpacing: 0.5,
+        shadows: _textShadow,
       );
 
   // Botões grandes (CTAs principais)
@@ -65,6 +73,7 @@ class AppTextStyles {
         fontSize: 24,
         fontWeight: FontWeight.bold,
         letterSpacing: 0.8,
+        shadows: _textShadow,
       );
 
   // Legendas e subtextos
