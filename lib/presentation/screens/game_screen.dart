@@ -214,7 +214,7 @@ class _GameScreenState extends State<GameScreen>
 
                             // Personagem reativo
                             SizedBox(
-                              height: 120,
+                              height: 200,
                               child: Image.asset(
                                 _characterImage,
                                 key: ValueKey(_characterImage),

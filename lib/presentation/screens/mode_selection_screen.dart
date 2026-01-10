@@ -171,7 +171,12 @@ class ModeSelectionScreen extends StatelessWidget {
                           Flexible(
                             child: Text(
                               title,
-                              style: AppTextStyles.h3.copyWith(color: Colors.white),
+                              style: AppTextStyles.h3.copyWith(
+                                color: Colors.white,
+                                shadows: [
+                                  Shadow(color: Colors.black54, blurRadius: 4, offset: Offset(1, 2)),
+                                ],
+                              ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -202,8 +207,11 @@ class ModeSelectionScreen extends StatelessWidget {
                       Text(
                         description,
                         style: AppTextStyles.body.copyWith(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white,
                           fontSize: 14,
+                          shadows: [
+                            Shadow(color: Colors.black54, blurRadius: 4, offset: Offset(1, 2)),
+                          ],
                         ),
                       ),
                     ],

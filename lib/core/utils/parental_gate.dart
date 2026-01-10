@@ -112,10 +112,11 @@ class ParentalGate {
               Row(
                 children: [
                   Expanded(
-                    child: TextButton(
+                    child: OutlinedButton(
                       onPressed: () => Navigator.pop(context, false),
-                      style: TextButton.styleFrom(
+                      style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
+                        side: BorderSide(color: AppColors.error, width: 2),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -123,7 +124,8 @@ class ParentalGate {
                       child: Text(
                         'Cancelar',
                         style: AppTextStyles.button.copyWith(
-                          color: AppColors.textSecondary,
+                          color: AppColors.error,
+                          shadows: [], // Remove sombra do texto do botão
                         ),
                       ),
                     ),
