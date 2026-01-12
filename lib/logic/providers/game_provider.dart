@@ -28,6 +28,7 @@ class GameProvider extends ChangeNotifier {
   // Estado do jogo
   GameState _state = GameState.idle;
   GameMode _mode = GameMode.training;
+  Operation _selectedOperation = Operation.multiplication;
   int? _currentTableNumber;
 
   // Questões
@@ -50,6 +51,7 @@ class GameProvider extends ChangeNotifier {
   // Getters
   GameState get state => _state;
   GameMode get mode => _mode;
+  Operation get selectedOperation => _selectedOperation;
   int? get currentTableNumber => _currentTableNumber;
   Question? get currentQuestion =>
       _questions.isNotEmpty ? _questions[_currentQuestionIndex] : null;
@@ -67,6 +69,14 @@ class GameProvider extends ChangeNotifier {
   
   double get progress => totalQuestions > 0 ? currentQuestionNumber / totalQuestions : 0.0;
   bool get isLastQuestion => _currentQuestionIndex >= _questions.length - 1;
+
+  // ===== SELEÇÃO DE OPERAÇÃO =====
+
+  /// Define a operação matemática selecionada
+  void setOperation(Operation operation) {
+    _selectedOperation = operation;
+    notifyListeners();
+  }
 
   // ===== CONTROLE DO JOGO =====
 
@@ -90,8 +100,12 @@ class GameProvider extends ChangeNotifier {
     // Carrega o progresso existente ou cria um novo
     _currentProgress = await HiveService.getOrCreateProgress(tableNumber);
 
-    // Gera as questões
-    _questions = _questionGenerator.generateQuestionSet(tableNumber, questionCount);
+    // Gera as questões com a operação selecionada
+    _questions = _questionGenerator.generateQuestionSet(
+      tableNumber,
+      questionCount,
+      operation: _selectedOperation,
+    );
 
     // Inicia música de fundo
     AudioService().playBackgroundMusic();

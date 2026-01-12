@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
+import '../../data/models/question.dart';
+import '../../data/services/learning_content_service.dart';
 import '../../logic/providers/game_provider.dart';
 import '../../logic/providers/progress_provider.dart';
 import 'game_screen.dart';
@@ -16,6 +18,7 @@ class DifficultyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: _buildLearnButton(context),
       body: Container(
         decoration: const BoxDecoration(
           gradient: AppColors.backgroundGradient,
@@ -26,7 +29,7 @@ class DifficultyScreen extends StatelessWidget {
               // Header
               _buildHeader(context),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
 
               // Título
               Padding(
@@ -34,15 +37,13 @@ class DifficultyScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      'Escolha a Tabuada',
+                      'Escolha a Operação',
                       style: AppTextStyles.h2,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      mode == GameMode.timeAttack
-                          ? 'Questões aleatórias de todas as tabuadas'
-                          : 'Selecione qual tabuada quer praticar',
+                      'Selecione a operação matemática',
                       style: AppTextStyles.caption,
                       textAlign: TextAlign.center,
                     ),
@@ -50,7 +51,36 @@ class DifficultyScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 16),
+
+              // Seleção de Operação
+              _buildOperationSelector(context),
+
+              const SizedBox(height: 20),
+
+              // Título da tabuada
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    Text(
+                      'Escolha o Número',
+                      style: AppTextStyles.h2.copyWith(fontSize: 22),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      mode == GameMode.timeAttack
+                          ? 'Questões aleatórias de todas as tabuadas'
+                          : 'Selecione qual número quer praticar',
+                      style: AppTextStyles.caption,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 16),
 
               // Grid de tabuadas
               Expanded(
@@ -64,6 +94,284 @@ class DifficultyScreen extends StatelessWidget {
       ),
     );
   }
+
+  /// Botão flutuante "Aprender"
+  Widget _buildLearnButton(BuildContext context) {
+    return Consumer<GameProvider>(
+      builder: (context, gameProvider, _) {
+        return FloatingActionButton.extended(
+          onPressed: () => _showLearningBottomSheet(context, gameProvider),
+          backgroundColor: AppColors.secondary,
+          icon: const Text('💡', style: TextStyle(fontSize: 24)),
+          label: Text(
+            'Aprender',
+            style: AppTextStyles.button.copyWith(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ).animate().fadeIn(delay: 500.ms).slideY(begin: 1, end: 0);
+      },
+    );
+  }
+
+  /// Modal Bottom Sheet com conteúdo educativo
+  void _showLearningBottomSheet(BuildContext context, GameProvider gameProvider) {
+    final operation = gameProvider.selectedOperation;
+    // Usar operação intro se não houver número selecionado
+    final content = LearningContentService.getOperationIntro(operation);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Handle bar
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: AppColors.divider,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Título
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    gradient: _getOperationGradient(operation),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    operation.symbol,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    content.title,
+                    style: AppTextStyles.h2.copyWith(fontSize: 22),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            // Explicação
+            Text(
+              content.explanation,
+              style: AppTextStyles.body,
+            ),
+            const SizedBox(height: 16),
+
+            // Dica Visual
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.divider),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Text('💡', style: TextStyle(fontSize: 18)),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Dica Visual',
+                        style: AppTextStyles.body.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    content.visualTip,
+                    style: AppTextStyles.body.copyWith(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Exemplos
+            Text(
+              'Exemplos:',
+              style: AppTextStyles.body.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            ...content.examples.map((example) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  const Text('✨', style: TextStyle(fontSize: 14)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(example, style: AppTextStyles.body),
+                  ),
+                ],
+              ),
+            )),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Seletor de operação com 4 botões
+  Widget _buildOperationSelector(BuildContext context) {
+    return Consumer<GameProvider>(
+      builder: (context, gameProvider, _) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildOperationButton(
+                context,
+                gameProvider,
+                Operation.addition,
+                '+',
+                const LinearGradient(
+                  colors: [Color(0xFF4CAF50), Color(0xFF81C784)],
+                ),
+              ),
+              _buildOperationButton(
+                context,
+                gameProvider,
+                Operation.subtraction,
+                '-',
+                const LinearGradient(
+                  colors: [Color(0xFFFF9800), Color(0xFFFFB74D)],
+                ),
+              ),
+              _buildOperationButton(
+                context,
+                gameProvider,
+                Operation.multiplication,
+                '×',
+                const LinearGradient(
+                  colors: [Color(0xFFAA5FFF), Color(0xFFD0A8FF)],
+                ),
+              ),
+              _buildOperationButton(
+                context,
+                gameProvider,
+                Operation.division,
+                '÷',
+                const LinearGradient(
+                  colors: [Color(0xFFE91E63), Color(0xFFF48FB1)],
+                ),
+              ),
+            ],
+          ),
+        ).animate().fadeIn(delay: 200.ms).slideY(begin: -0.3, end: 0);
+      },
+    );
+  }
+
+  /// Botão individual de operação
+  Widget _buildOperationButton(
+    BuildContext context,
+    GameProvider gameProvider,
+    Operation operation,
+    String symbol,
+    LinearGradient gradient,
+  ) {
+    final isSelected = gameProvider.selectedOperation == operation;
+
+    return GestureDetector(
+      onTap: () => gameProvider.setOperation(operation),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: isSelected ? 72 : 64,
+        height: isSelected ? 72 : 64,
+        decoration: BoxDecoration(
+          gradient: gradient,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? Colors.white : Colors.transparent,
+            width: isSelected ? 4 : 0,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: isSelected
+                  ? gradient.colors.first.withOpacity(0.5)
+                  : Colors.black.withOpacity(0.1),
+              blurRadius: isSelected ? 15 : 8,
+              offset: Offset(0, isSelected ? 6 : 4),
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            symbol,
+            style: TextStyle(
+              fontSize: isSelected ? 36 : 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  color: Colors.black.withOpacity(0.3),
+                  offset: const Offset(1, 1),
+                  blurRadius: 3,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Retorna o gradiente para uma operação específica
+  LinearGradient _getOperationGradient(Operation operation) {
+    switch (operation) {
+      case Operation.addition:
+        return const LinearGradient(
+          colors: [Color(0xFF4CAF50), Color(0xFF81C784)],
+        );
+      case Operation.subtraction:
+        return const LinearGradient(
+          colors: [Color(0xFFFF9800), Color(0xFFFFB74D)],
+        );
+      case Operation.multiplication:
+        return const LinearGradient(
+          colors: [Color(0xFFAA5FFF), Color(0xFFD0A8FF)],
+        );
+      case Operation.division:
+        return const LinearGradient(
+          colors: [Color(0xFFE91E63), Color(0xFFF48FB1)],
+        );
+    }
+  }
+
 
   Widget _buildHeader(BuildContext context) {
     return Container(
