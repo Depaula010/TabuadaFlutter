@@ -449,6 +449,12 @@ class DifficultyScreen extends StatelessWidget {
     return Consumer2<ProgressProvider, GameProvider>(
       builder: (context, progressProvider, gameProvider, _) {
         final operation = gameProvider.selectedOperation;
+        // Atualiza o cache do provider quando a operação muda
+        if (progressProvider.currentOperation != operation) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            progressProvider.loadProgressForOperation(operation);
+          });
+        }
         return GridView.builder(
           padding: const EdgeInsets.all(20),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -460,9 +466,9 @@ class DifficultyScreen extends StatelessWidget {
           itemCount: 10,
           itemBuilder: (context, index) {
             final tableNumber = index + 1;
-            final progress = progressProvider.getTableProgress(tableNumber);
-            final stars = progressProvider.getTableStars(tableNumber);
-            final isCompleted = progressProvider.isTableCompleted(tableNumber);
+            final progress = progressProvider.getTableProgress(tableNumber, operation);
+            final stars = progressProvider.getTableStars(tableNumber, operation);
+            final isCompleted = progressProvider.isTableCompleted(tableNumber, operation);
 
             return _buildTableCard(
               context,

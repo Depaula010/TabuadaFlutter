@@ -1,6 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/game_progress.dart';
 import '../models/trophy.dart';
+import '../models/question.dart';
 
 /// Serviço de persistência local usando Hive
 class HiveService {
@@ -32,23 +33,31 @@ class HiveService {
     }
   }
 
+  // ===== HELPERS PARA CHAVES =====
+  
+  /// Gera a chave composta para progresso: "operation_tableNumber"
+  static String _progressKey(Operation operation, int tableNumber) {
+    return '${operation.name}_$tableNumber';
+  }
+
   // ===== PROGRESSO =====
 
-  /// Obtém o progresso de uma tabuada específica
-  static GameProgress? getProgress(int tableNumber) {
-    return _progressBox.get('table_$tableNumber');
+  /// Obtém o progresso de uma tabuada e operação específica
+  static GameProgress? getProgress(int tableNumber, Operation operation) {
+    return _progressBox.get(_progressKey(operation, tableNumber));
   }
 
-  /// Salva ou atualiza o progresso de uma tabuada
-  static Future<void> saveProgress(GameProgress progress) async {
-    await _progressBox.put('table_${progress.tableNumber}', progress);
+  /// Salva ou atualiza o progresso de uma tabuada/operação
+  static Future<void> saveProgress(GameProgress progress, Operation operation) async {
+    final key = _progressKey(operation, progress.tableNumber);
+    await _progressBox.put(key, progress);
   }
 
-  /// Obtém todo o progresso (todas as tabuadas)
-  static Map<int, GameProgress> getAllProgress() {
+  /// Obtém todo o progresso para uma operação específica (tabuadas 1-10)
+  static Map<int, GameProgress> getAllProgressForOperation(Operation operation) {
     final progressMap = <int, GameProgress>{};
     for (var i = 1; i <= 10; i++) {
-      final progress = getProgress(i);
+      final progress = getProgress(i, operation);
       if (progress != null) {
         progressMap[i] = progress;
       }
@@ -56,12 +65,12 @@ class HiveService {
     return progressMap;
   }
 
-  /// Cria um novo progresso para uma tabuada se não existir
-  static Future<GameProgress> getOrCreateProgress(int tableNumber) async {
-    var progress = getProgress(tableNumber);
+  /// Cria um novo progresso para uma tabuada/operação se não existir
+  static Future<GameProgress> getOrCreateProgress(int tableNumber, Operation operation) async {
+    var progress = getProgress(tableNumber, operation);
     if (progress == null) {
       progress = GameProgress(tableNumber: tableNumber);
-      await saveProgress(progress);
+      await saveProgress(progress, operation);
     }
     return progress;
   }

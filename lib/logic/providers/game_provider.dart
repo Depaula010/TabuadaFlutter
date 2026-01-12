@@ -97,8 +97,8 @@ class GameProvider extends ChangeNotifier {
     _consecutiveCorrect = 0;
     _currentQuestionIndex = 0;
 
-    // Carrega o progresso existente ou cria um novo
-    _currentProgress = await HiveService.getOrCreateProgress(tableNumber);
+    // Carrega o progresso existente ou cria um novo para esta operação
+    _currentProgress = await HiveService.getOrCreateProgress(tableNumber, _selectedOperation);
 
     // Gera as questões com a operação selecionada
     _questions = _questionGenerator.generateQuestionSet(
@@ -212,14 +212,14 @@ class GameProvider extends ChangeNotifier {
         _currentProgress!.markCompleted();
         
         // Desbloqueia troféu de primeira conclusão
-        final allProgress = HiveService.getAllProgress();
+        final allProgress = HiveService.getAllProgressForOperation(_selectedOperation);
         final completedCount = allProgress.values.where((p) => p.isCompleted).length;
         if (completedCount == 1) {
           await HiveService.unlockTrophy('first_steps');
         }
       }
 
-      await HiveService.saveProgress(_currentProgress!);
+      await HiveService.saveProgress(_currentProgress!, _selectedOperation);
     }
 
     notifyListeners();
