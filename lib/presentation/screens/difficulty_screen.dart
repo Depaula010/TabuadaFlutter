@@ -305,44 +305,51 @@ class DifficultyScreen extends StatelessWidget {
     LinearGradient gradient,
   ) {
     final isSelected = gameProvider.selectedOperation == operation;
+    final baseSize = isSelected ? 64.0 : 56.0;
 
-    return GestureDetector(
-      onTap: () => gameProvider.setOperation(operation),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: isSelected ? 72 : 64,
-        height: isSelected ? 72 : 64,
-        decoration: BoxDecoration(
-          gradient: gradient,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? Colors.white : Colors.transparent,
-            width: isSelected ? 4 : 0,
+    return Flexible(
+      child: GestureDetector(
+        onTap: () => gameProvider.setOperation(operation),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          constraints: BoxConstraints(
+            maxWidth: baseSize,
+            maxHeight: baseSize,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: isSelected
-                  ? gradient.colors.first.withOpacity(0.5)
-                  : Colors.black.withOpacity(0.1),
-              blurRadius: isSelected ? 15 : 8,
-              offset: Offset(0, isSelected ? 6 : 4),
+          width: baseSize,
+          height: baseSize,
+          decoration: BoxDecoration(
+            gradient: gradient,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: isSelected ? Colors.white : Colors.transparent,
+              width: isSelected ? 3 : 0,
             ),
-          ],
-        ),
-        child: Center(
-          child: Text(
-            symbol,
-            style: TextStyle(
-              fontSize: isSelected ? 36 : 30,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: [
-                Shadow(
-                  color: Colors.black.withOpacity(0.3),
-                  offset: const Offset(1, 1),
-                  blurRadius: 3,
-                ),
-              ],
+            boxShadow: [
+              BoxShadow(
+                color: isSelected
+                    ? gradient.colors.first.withValues(alpha: 0.5)
+                    : Colors.black.withValues(alpha: 0.1),
+                blurRadius: isSelected ? 12 : 6,
+                offset: Offset(0, isSelected ? 5 : 3),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              symbol,
+              style: TextStyle(
+                fontSize: isSelected ? 32 : 26,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                shadows: [
+                  Shadow(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    offset: const Offset(1, 1),
+                    blurRadius: 2,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

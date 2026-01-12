@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import '../../data/models/game_progress.dart';
 import '../../data/models/trophy.dart';
 import '../../data/services/hive_service.dart';
@@ -9,7 +10,13 @@ class ProgressProvider extends ChangeNotifier {
   List<Trophy> _allTrophies = [];
 
   ProgressProvider() {
-    loadProgress();
+    // Carrega dados sincronamente primeiro (sem notificar)
+    _allProgress = HiveService.getAllProgress();
+    _allTrophies = HiveService.getAllTrophies();
+    // Notifica após o frame atual para evitar setState durante build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 
   // Getters
