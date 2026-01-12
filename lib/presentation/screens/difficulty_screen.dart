@@ -411,7 +411,7 @@ class DifficultyScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.secondary.withOpacity(0.4),
+                  color: AppColors.secondary.withValues(alpha: 0.4),
                   blurRadius: 25,
                   offset: const Offset(0, 10),
                 ),
@@ -420,7 +420,7 @@ class DifficultyScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+                const Icon(
                   Icons.shuffle_rounded,
                   size: 80,
                   color: Colors.white,
@@ -434,7 +434,7 @@ class DifficultyScreen extends StatelessWidget {
                 Text(
                   'Todas as tabuadas de 1 a 10',
                   style: AppTextStyles.body.copyWith(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                   ),
                 ),
               ],
@@ -446,8 +446,9 @@ class DifficultyScreen extends StatelessWidget {
   }
 
   Widget _buildTablesGrid(BuildContext context) {
-    return Consumer<ProgressProvider>(
-      builder: (context, progressProvider, _) {
+    return Consumer2<ProgressProvider, GameProvider>(
+      builder: (context, progressProvider, gameProvider, _) {
+        final operation = gameProvider.selectedOperation;
         return GridView.builder(
           padding: const EdgeInsets.all(20),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -470,11 +471,26 @@ class DifficultyScreen extends StatelessWidget {
               isCompleted,
               progress,
               index,
+              operation,
             );
           },
         );
       },
     );
+  }
+
+  /// Gera o texto do card baseado na operação selecionada
+  String _getCardLabel(Operation operation, int number) {
+    switch (operation) {
+      case Operation.addition:
+        return 'Soma com $number';
+      case Operation.subtraction:
+        return 'Subtração de $number';
+      case Operation.multiplication:
+        return 'Tabuada do $number';
+      case Operation.division:
+        return 'Divisão por $number';
+    }
   }
 
   Widget _buildTableCard(
@@ -484,6 +500,7 @@ class DifficultyScreen extends StatelessWidget {
     bool isCompleted,
     progress,
     int index,
+    Operation operation,
   ) {
     final accuracy = progress?.accuracy ?? 0.0;
 
@@ -500,8 +517,8 @@ class DifficultyScreen extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: isCompleted
-                  ? AppColors.success.withOpacity(0.2)
-                  : Colors.black.withOpacity(0.08),
+                  ? AppColors.success.withValues(alpha: 0.2)
+                  : Colors.black.withValues(alpha: 0.08),
               blurRadius: 15,
               offset: const Offset(0, 5),
             ),
@@ -527,9 +544,9 @@ class DifficultyScreen extends StatelessWidget {
 
                 const SizedBox(height: 8),
 
-                // Texto
+                // Texto dinâmico baseado na operação
                 Text(
-                  'Tabuada do $tableNumber',
+                  _getCardLabel(operation, tableNumber),
                   style: AppTextStyles.body.copyWith(fontSize: 14),
                 ),
 
