@@ -1,19 +1,60 @@
-/// Modelo de questão de tabuada
+/// Enum representando as 4 operações matemáticas básicas
+enum Operation {
+  addition,      // Adição (+)
+  subtraction,   // Subtração (-)
+  multiplication, // Multiplicação (×)
+  division,      // Divisão (÷)
+}
+
+/// Extensão para obter o símbolo da operação
+extension OperationSymbol on Operation {
+  /// Retorna o símbolo matemático da operação
+  String get symbol {
+    switch (this) {
+      case Operation.addition:
+        return '+';
+      case Operation.subtraction:
+        return '-';
+      case Operation.multiplication:
+        return '×';
+      case Operation.division:
+        return '÷';
+    }
+  }
+
+  /// Retorna o nome da operação em português
+  String get displayName {
+    switch (this) {
+      case Operation.addition:
+        return 'Adição';
+      case Operation.subtraction:
+        return 'Subtração';
+      case Operation.multiplication:
+        return 'Multiplicação';
+      case Operation.division:
+        return 'Divisão';
+    }
+  }
+}
+
+/// Modelo de questão matemática genérico para as 4 operações
 class Question {
-  final int multiplicand; // Primeiro número (ex: 7 em 7×8)
-  final int multiplier; // Segundo número (ex: 8 em 7×8)
+  final int operandA;        // Primeiro operando (ex: 7 em 7 + 8)
+  final int operandB;        // Segundo operando (ex: 8 em 7 + 8)
+  final Operation operation; // Tipo da operação
   final int correctAnswer;
-  final List<int> options; // 4 opções: 1 correta + 3 incorretas
+  final List<int> options;   // 4 opções: 1 correta + 3 incorretas
 
   Question({
-    required this.multiplicand,
-    required this.multiplier,
+    required this.operandA,
+    required this.operandB,
+    required this.operation,
     required this.correctAnswer,
     required this.options,
   });
 
-  /// Getter para exibir a questão formatada
-  String get questionText => '$multiplicand × $multiplier = ?';
+  /// Getter para exibir a questão formatada com símbolo correto
+  String get questionText => '$operandA ${operation.symbol} $operandB = ?';
 
   /// Verifica se a resposta está correta
   bool isCorrectAnswer(int answer) => answer == correctAnswer;
@@ -22,8 +63,9 @@ class Question {
   Question copyWithShuffledOptions() {
     final shuffledOptions = List<int>.from(options)..shuffle();
     return Question(
-      multiplicand: multiplicand,
-      multiplier: multiplier,
+      operandA: operandA,
+      operandB: operandB,
+      operation: operation,
       correctAnswer: correctAnswer,
       options: shuffledOptions,
     );
@@ -31,5 +73,5 @@ class Question {
 
   @override
   String toString() =>
-      'Question($multiplicand × $multiplier = $correctAnswer, options: $options)';
+      'Question($operandA ${operation.symbol} $operandB = $correctAnswer, options: $options)';
 }
