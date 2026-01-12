@@ -211,11 +211,19 @@ class GameProvider extends ChangeNotifier {
       if (_wrongCount == 0) {
         _currentProgress!.markCompleted();
         
-        // Desbloqueia troféu de primeira conclusão
+        // Verifica troféus de conclusão
         final allProgress = HiveService.getAllProgressForOperation(_selectedOperation);
-        final completedCount = allProgress.values.where((p) => p.isCompleted).length;
+        // +1 porque o progresso atual ainda não foi salvo no Hive
+        final completedCount = allProgress.values.where((p) => p.isCompleted).length + 1;
+        
+        // Troféu de primeira conclusão
         if (completedCount == 1) {
           await HiveService.unlockTrophy('first_steps');
+        }
+        
+        // Troféu de mestre: completou todas as 10 tabuadas desta operação
+        if (completedCount >= 10) {
+          await HiveService.unlockTrophy('master_of_all');
         }
       }
 
