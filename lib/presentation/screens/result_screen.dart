@@ -45,8 +45,9 @@ class _ResultScreenState extends State<ResultScreen> {
     }
     // Abaixo de 80% - sem confetti, apenas feedback visual
 
-    // Recarrega o progresso
-    context.read<ProgressProvider>().loadProgress();
+    // Recarrega o progresso para a operação atual
+    final operation = context.read<GameProvider>().selectedOperation;
+    context.read<ProgressProvider>().loadProgressForOperation(operation);
   }
 
   @override
