@@ -243,8 +243,7 @@ A data da "Última atualização" no topo deste documento indica quando a polít
 
 Se você tiver dúvidas ou preocupações sobre esta Política de Privacidade, entre em contato:
 
-📧 **E-mail:** [rafael.depaula@myyahoo.com]  
-🌐 **Website:** [https://seu-site.com]  
+📧 **E-mail:** [rafael.depaula@myyahoo.com]   
 📱 **Desenvolvedor:** [Rafael Depaula]  
 
 **Tempo de resposta:** Normalmente respondemos em até 48 horas úteis.
