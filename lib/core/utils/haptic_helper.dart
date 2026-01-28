@@ -1,50 +1,34 @@
-import 'package:vibration/vibration.dart';
+import 'package:flutter/services.dart';
 import '../../data/services/hive_service.dart';
 
-/// Helper para feedback tátil (vibração)
+/// Helper para feedback tátil (vibração) usando HapticFeedback nativo do Flutter
 class HapticHelper {
   /// Vibração leve para feedback de sucesso
   static Future<void> success() async {
     if (!HiveService.isVibrationEnabled()) return;
-    
-    final hasVibrator = await Vibration.hasVibrator() ?? false;
-    if (hasVibrator) {
-      Vibration.vibrate(duration: 50, amplitude: 128);
-    }
+    await HapticFeedback.lightImpact();
   }
 
   /// Vibração média para feedback de erro
   static Future<void> error() async {
     if (!HiveService.isVibrationEnabled()) return;
-    
-    final hasVibrator = await Vibration.hasVibrator() ?? false;
-    if (hasVibrator) {
-      Vibration.vibrate(duration: 200, amplitude: 200);
-    }
+    await HapticFeedback.heavyImpact();
   }
 
   /// Vibração para seleção (toque em botões)
   static Future<void> selection() async {
     if (!HiveService.isVibrationEnabled()) return;
-    
-    final hasVibrator = await Vibration.hasVibrator() ?? false;
-    if (hasVibrator) {
-      Vibration.vibrate(duration: 30, amplitude: 100);
-    }
+    await HapticFeedback.selectionClick();
   }
 
   /// Vibração celebratória (conquistas)
   static Future<void> celebration() async {
     if (!HiveService.isVibrationEnabled()) return;
-    
-    final hasVibrator = await Vibration.hasVibrator() ?? false;
-    if (hasVibrator) {
-      // Padrão de vibração: curta-pausa-curta-pausa-longa
-      Vibration.vibrate(duration: 100);
-      await Future.delayed(const Duration(milliseconds: 50));
-      Vibration.vibrate(duration: 100);
-      await Future.delayed(const Duration(milliseconds: 50));
-      Vibration.vibrate(duration: 300);
-    }
+    // Padrão de vibração: curta-pausa-curta-pausa-longa
+    await HapticFeedback.mediumImpact();
+    await Future.delayed(const Duration(milliseconds: 50));
+    await HapticFeedback.mediumImpact();
+    await Future.delayed(const Duration(milliseconds: 50));
+    await HapticFeedback.heavyImpact();
   }
 }
