@@ -72,21 +72,22 @@ class ModeSelectionScreen extends StatelessWidget {
                       index: 1,
                     ),
 
-                    _buildModeCard(
-                      context,
-                      title: 'Duelo de Balões',
-                      description: 'Estoure os balões com as respostas corretas!',
-                      icon: Icons.celebration_rounded,
-                      gradient: AppColors.accentGradient,
-                      mode: GameMode.balloonDuel,
-                      features: [
-                        'Balões flutuantes',
-                        'Interação divertida',
-                        'Modo visual',
-                      ],
-                      index: 2,
-                      comingSoon: true,
-                    ),
+                    // TODO: Re-enable when Balloon Duel mode is complete
+                    // _buildModeCard(
+                    //   context,
+                    //   title: 'Duelo de Balões',
+                    //   description: 'Estoure os balões com as respostas corretas!',
+                    //   icon: Icons.celebration_rounded,
+                    //   gradient: AppColors.accentGradient,
+                    //   mode: GameMode.balloonDuel,
+                    //   features: [
+                    //     'Balões flutuantes',
+                    //     'Interação divertida',
+                    //     'Modo visual',
+                    //   ],
+                    //   index: 2,
+                    //   comingSoon: true,
+                    // ),
                   ],
                 ),
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
+import '../../core/utils/parental_gate.dart';
 import '../../data/services/hive_service.dart';
 import '../../data/services/audio_service.dart';
 import '../widgets/custom_button.dart';
@@ -270,6 +271,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         colors: [Colors.red, Colors.redAccent],
       ),
       onPressed: () async {
+        // Parental Gate: Verificação para adultos antes de ação destrutiva
+        final allowed = await ParentalGate.show(context);
+        if (!allowed || !mounted) return;
+
         final confirmed = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
