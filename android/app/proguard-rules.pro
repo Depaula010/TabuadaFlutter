@@ -18,11 +18,20 @@
 -keep class io.flutter.view.** { *; }
 -keep class io.flutter.** { *; }
 -keep class io.flutter.plugins.** { *; }
+-keep class io.flutter.embedding.** { *; }
 
 # Hive
 -keep class com.example.mestres_do_calculo.** { *; }
 -keep class hive.** { *; }
 -keepclassmembers class * extends hive.TypeAdapter { *; }
 
-# Keep application class
+# Keep application class and all Android components (Activity, Service, etc.)
 -keep class com.mestresdocalculo.app.** { *; }
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+
+# MultiDex
+-keep class androidx.multidex.** { *; }
