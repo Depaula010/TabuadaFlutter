@@ -1,7 +1,7 @@
 name: mestres_do_calculo
 description: App educativo de tabuada para crianças de 6 a 12 anos.
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
