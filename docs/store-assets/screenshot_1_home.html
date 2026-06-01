@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    width:1080px; height:1920px; overflow:hidden;
+    font-family:'Nunito', sans-serif;
+    background: linear-gradient(180deg, #E3F2FD 0%, #EDE7F6 50%, #FFF9C4 100%);
+    position:relative;
+  }
+
+  /* Status bar */
+  .status {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:18px 40px 0;
+    font-size:26px; font-weight:700; color:#2C3E50;
+  }
+  .status-icons { display:flex; gap:12px; align-items:center; font-size:24px; }
+
+  /* Floating math symbols */
+  .float {
+    position:absolute; font-weight:900; color:rgba(91,127,255,0.12);
+    pointer-events:none;
+  }
+  .f1 { font-size:120px; top:180px; left:30px;  transform:rotate(-20deg); }
+  .f2 { font-size:90px;  top:300px; right:20px; transform:rotate(15deg); }
+  .f3 { font-size:80px;  top:600px; left:10px;  transform:rotate(-10deg); }
+  .f4 { font-size:100px; top:700px; right:30px; transform:rotate(20deg); }
+  .f5 { font-size:70px;  bottom:400px; left:50px;  transform:rotate(-15deg); }
+  .f6 { font-size:90px;  bottom:300px; right:40px; transform:rotate(10deg); }
+
+  /* Stars decoration */
+  .deco-star {
+    position:absolute; font-size:50px; opacity:0.3;
+  }
+  .ds1 { top:200px; right:80px; transform:rotate(15deg); }
+  .ds2 { top:400px; left:60px;  transform:rotate(-10deg); }
+  .ds3 { bottom:500px; right:60px; transform:rotate(20deg); }
+
+  /* Main content */
+  .content {
+    display:flex; flex-direction:column; align-items:center;
+    padding-top: 80px;
+    gap:0;
+  }
+
+  .icon-wrap {
+    width:220px; height:220px;
+    background: linear-gradient(135deg, #5B7FFF, #AA5FFF);
+    border-radius:52px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:120px;
+    box-shadow: 0 20px 60px rgba(91,127,255,0.4), 0 6px 20px rgba(0,0,0,0.15);
+    margin-bottom: 40px;
+  }
+
+  .app-title {
+    font-size:72px; font-weight:900; color:#2C3E50;
+    text-align:center; line-height:1.1;
+    letter-spacing:-1px;
+  }
+
+  .app-sub {
+    font-size:32px; font-weight:700; color:#7F8C8D;
+    text-align:center; margin-top:16px;
+  }
+
+  /* Character area */
+  .character-area {
+    margin-top:60px;
+    width:400px; height:400px;
+    background: rgba(255,255,255,0.5);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:220px;
+    box-shadow: 0 10px 40px rgba(91,127,255,0.15);
+    position:relative;
+  }
+
+  .bubble {
+    position:absolute; top:-20px; right:-30px;
+    background:#fff;
+    border-radius:20px;
+    padding:14px 24px;
+    font-size:28px; font-weight:800; color:#5B7FFF;
+    box-shadow:0 6px 20px rgba(0,0,0,0.12);
+  }
+  .bubble::after {
+    content:'';
+    position:absolute; bottom:-16px; left:30px;
+    border:8px solid transparent;
+    border-top:8px solid #fff;
+  }
+
+  /* Score banner */
+  .score-banner {
+    display:flex; gap:48px; margin-top:60px;
+  }
+  .score-item {
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+  }
+  .score-num {
+    font-size:52px; font-weight:900; color:#5B7FFF;
+  }
+  .score-label {
+    font-size:24px; font-weight:700; color:#7F8C8D;
+  }
+
+  /* Botão principal */
+  .btn-start {
+    margin-top:70px;
+    width:600px; padding:40px;
+    background: linear-gradient(135deg, #FFD93D, #FFB800);
+    border-radius:32px;
+    font-size:48px; font-weight:900; color:#2C3E50;
+    text-align:center;
+    box-shadow: 0 12px 40px rgba(255,184,0,0.5), 0 4px 12px rgba(0,0,0,.1);
+    letter-spacing:1px;
+    position:relative;
+  }
+  .btn-start::after {
+    content:'';
+    position:absolute; top:0; left:0; right:0;
+    height:50%; background:rgba(255,255,255,0.2);
+    border-radius:32px 32px 0 0;
+  }
+
+  .btn-secondary {
+    margin-top:24px;
+    font-size:28px; font-weight:700; color:#7F8C8D;
+    text-align:center;
+  }
+
+  /* Bottom nav */
+  .nav {
+    position:absolute; bottom:0; left:0; right:0;
+    height:130px;
+    background:rgba(255,255,255,0.85);
+    backdrop-filter:blur(10px);
+    display:flex; align-items:center; justify-content:space-around;
+    border-top:1px solid rgba(0,0,0,.06);
+  }
+  .nav-item {
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+  }
+  .nav-icon { font-size:44px; }
+  .nav-label { font-size:22px; font-weight:700; color:#7F8C8D; }
+  .nav-item.active .nav-icon { filter:none; }
+  .nav-item.active .nav-label { color:#5B7FFF; }
+  .nav-dot {
+    width:8px; height:8px; border-radius:50%; background:#5B7FFF;
+    margin-top:2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating decorations -->
+<div class="float f1">×</div>
+<div class="float f2">÷</div>
+<div class="float f3">+</div>
+<div class="float f4">−</div>
+<div class="float f5">∑</div>
+<div class="float f6">%</div>
+<div class="deco-star ds1">⭐</div>
+<div class="deco-star ds2">✨</div>
+<div class="deco-star ds3">💫</div>
+
+<!-- Status bar -->
+<div class="status">
+  <span>9:41</span>
+  <div class="status-icons">
+    <span>📶</span>
+    <span>🔋</span>
+  </div>
+</div>
+
+<!-- Main content -->
+<div class="content">
+  <div class="icon-wrap">🧮</div>
+
+  <div class="app-title">Mestres do<br/>Cálculo</div>
+  <div class="app-sub">Aprenda tabuada brincando!</div>
+
+  <div class="character-area">
+    🧙
+    <div class="bubble">Olá, aluno! 👋</div>
+  </div>
+
+  <div class="score-banner">
+    <div class="score-item">
+      <span class="score-num">7</span>
+      <span class="score-label">Tabuadas</span>
+    </div>
+    <div class="score-item">
+      <span class="score-num">★ 142</span>
+      <span class="score-label">Estrelas</span>
+    </div>
+    <div class="score-item">
+      <span class="score-num">12</span>
+      <span class="score-label">Troféus</span>
+    </div>
+  </div>
+
+  <div class="btn-start">🎮 Jogar Agora!</div>
+  <div class="btn-secondary">Continuar de onde parei →</div>
+</div>
+
+<!-- Bottom nav -->
+<div class="nav">
+  <div class="nav-item active">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Início</span>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">📚</span>
+    <span class="nav-label">Tabuadas</span>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">🏆</span>
+    <span class="nav-label">Troféus</span>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">⚙️</span>
+    <span class="nav-label">Config</span>
+  </div>
+</div>
+
+</body>
+</html>

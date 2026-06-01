@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    width:1080px; height:1920px; overflow:hidden;
+    font-family:'Nunito', sans-serif;
+    background:#F5F7FA;
+    position:relative;
+  }
+
+  /* Status bar */
+  .status {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:18px 40px 0;
+    font-size:26px; font-weight:700; color:#fff;
+    position:relative; z-index:10;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #FFB800 0%, #FFD93D 60%, #FFE87C 100%);
+    padding:20px 40px 70px;
+    position:relative; overflow:hidden;
+  }
+  .header::after {
+    content:'';
+    position:absolute; bottom:-30px; left:0; right:0; height:60px;
+    background:#F5F7FA; border-radius:40px 40px 0 0;
+  }
+  .hc { position:absolute; border-radius:50%; background:rgba(255,255,255,.12); }
+  .hc1 { width:280px;height:280px; top:-80px;right:-40px; }
+  .hc2 { width:180px;height:180px; bottom:20px;left:300px; }
+
+  .header-title {
+    font-size:64px; font-weight:900; color:#2C3E50;
+    margin-top:20px; line-height:1.1;
+  }
+  .header-sub {
+    font-size:28px; font-weight:700; color:rgba(44,62,80,.6);
+    margin-top:10px;
+  }
+
+  /* Stats row */
+  .stats {
+    display:flex; gap:24px; margin-top:28px; flex-wrap:wrap;
+  }
+  .stat-chip {
+    background:rgba(255,255,255,.5);
+    border-radius:20px; padding:14px 24px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .stat-icon { font-size:32px; }
+  .stat-val { font-size:32px; font-weight:900; color:#2C3E50; }
+  .stat-lbl { font-size:20px; font-weight:700; color:#7F8C8D; }
+
+  /* Section title */
+  .section-title {
+    font-size:32px; font-weight:800; color:#7F8C8D;
+    padding:40px 40px 20px;
+    text-transform:uppercase; letter-spacing:2px;
+  }
+
+  /* Trophies grid */
+  .trophies {
+    display:grid; grid-template-columns:repeat(2,1fr);
+    gap:24px; padding:0 32px;
+  }
+
+  .trophy-card {
+    background:#fff;
+    border-radius:28px;
+    padding:32px 24px;
+    display:flex; flex-direction:column; align-items:center;
+    gap:12px;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);
+    position:relative;
+    overflow:hidden;
+    text-align:center;
+  }
+
+  .trophy-card.earned {
+    border:2px solid #FFD93D;
+    background:linear-gradient(180deg,#FFFDE7,#fff);
+  }
+  .trophy-card.locked {
+    opacity:0.5;
+  }
+
+  .earned-ribbon {
+    position:absolute; top:0;right:0;
+    background:linear-gradient(135deg,#FFD93D,#FFB800);
+    font-size:18px; font-weight:800; color:#2C3E50;
+    padding:8px 18px 8px 28px;
+    border-radius:0 28px 0 20px;
+  }
+
+  .trophy-icon { font-size:80px; line-height:1; }
+
+  .trophy-name {
+    font-size:26px; font-weight:800; color:#2C3E50;
+    line-height:1.2;
+  }
+  .trophy-desc {
+    font-size:20px; font-weight:600; color:#7F8C8D;
+    line-height:1.3;
+  }
+
+  .trophy-stars { font-size:28px; letter-spacing:4px; }
+
+  .trophy-pts {
+    font-size:22px; font-weight:800; color:#FFB800;
+    background:#FFF9C4; padding:6px 18px; border-radius:20px;
+  }
+
+  /* Bottom nav */
+  .nav {
+    position:absolute; bottom:0; left:0; right:0;
+    height:130px;
+    background:rgba(255,255,255,.95);
+    display:flex; align-items:center; justify-content:space-around;
+    border-top:1px solid rgba(0,0,0,.06);
+  }
+  .nav-item { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .nav-icon { font-size:44px; }
+  .nav-label { font-size:22px; font-weight:700; color:#7F8C8D; }
+  .nav-item.active .nav-label { color:#FFB800; }
+  .nav-dot { width:8px;height:8px;border-radius:50%;background:#FFB800;margin-top:2px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="hc hc1"></div>
+  <div class="hc hc2"></div>
+  <div class="status">
+    <span>9:41</span>
+    <div style="display:flex;gap:12px;font-size:24px;">
+      <span>📶</span><span>🔋</span>
+    </div>
+  </div>
+  <div style="height:10px;"></div>
+  <div class="header-title">Meus Troféus 🏆</div>
+  <div class="header-sub">Continue jogando para desbloquear mais!</div>
+  <div class="stats">
+    <div class="stat-chip">
+      <span class="stat-icon">🏆</span>
+      <span class="stat-val">12</span>
+      <span class="stat-lbl">conquistados</span>
+    </div>
+    <div class="stat-chip">
+      <span class="stat-icon">⭐</span>
+      <span class="stat-val">142</span>
+      <span class="stat-lbl">estrelas</span>
+    </div>
+    <div class="stat-chip">
+      <span class="stat-icon">🔒</span>
+      <span class="stat-val">8</span>
+      <span class="stat-lbl">restantes</span>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">Troféus Conquistados</div>
+
+<div class="trophies">
+  <!-- Earned -->
+  <div class="trophy-card earned">
+    <div class="earned-ribbon">✓ Ganho</div>
+    <div class="trophy-icon">🥇</div>
+    <div class="trophy-name">Primeira Tabuada</div>
+    <div class="trophy-desc">Complete a tabuada do 1</div>
+    <div class="trophy-stars">⭐⭐⭐</div>
+    <div class="trophy-pts">+50 pts</div>
+  </div>
+
+  <div class="trophy-card earned">
+    <div class="earned-ribbon">✓ Ganho</div>
+    <div class="trophy-icon">⚡</div>
+    <div class="trophy-name">Resposta Rápida</div>
+    <div class="trophy-desc">Acerte em menos de 3 segundos</div>
+    <div class="trophy-stars">⭐⭐⭐</div>
+    <div class="trophy-pts">+75 pts</div>
+  </div>
+
+  <div class="trophy-card earned">
+    <div class="earned-ribbon">✓ Ganho</div>
+    <div class="trophy-icon">🎯</div>
+    <div class="trophy-name">Sem Erros!</div>
+    <div class="trophy-desc">Complete uma tabuada perfeita</div>
+    <div class="trophy-stars">⭐⭐⭐</div>
+    <div class="trophy-pts">+100 pts</div>
+  </div>
+
+  <div class="trophy-card earned">
+    <div class="earned-ribbon">✓ Ganho</div>
+    <div class="trophy-icon">🔥</div>
+    <div class="trophy-name">Em Chamas!</div>
+    <div class="trophy-desc">5 acertos seguidos</div>
+    <div class="trophy-stars">⭐⭐☆</div>
+    <div class="trophy-pts">+80 pts</div>
+  </div>
+
+  <!-- Locked -->
+  <div class="trophy-card locked">
+    <div class="trophy-icon">💎</div>
+    <div class="trophy-name">Mestre dos Mestres</div>
+    <div class="trophy-desc">Complete todas as 10 tabuadas</div>
+    <div class="trophy-stars">☆☆☆</div>
+    <div class="trophy-pts">+500 pts</div>
+  </div>
+
+  <div class="trophy-card locked">
+    <div class="trophy-icon">🚀</div>
+    <div class="trophy-name">Super Velocidade</div>
+    <div class="trophy-desc">10 respostas em menos de 30s</div>
+    <div class="trophy-stars">☆☆☆</div>
+    <div class="trophy-pts">+200 pts</div>
+  </div>
+</div>
+
+<!-- Bottom nav -->
+<div class="nav">
+  <div class="nav-item">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Início</span>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">📚</span>
+    <span class="nav-label">Tabuadas</span>
+  </div>
+  <div class="nav-item active">
+    <span class="nav-icon">🏆</span>
+    <span class="nav-label">Troféus</span>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">⚙️</span>
+    <span class="nav-label">Config</span>
+  </div>
+</div>
+
+</body>
+</html>

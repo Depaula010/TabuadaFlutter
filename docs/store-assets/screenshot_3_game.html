@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    width:1080px; height:1920px; overflow:hidden;
+    font-family:'Nunito', sans-serif;
+    background: linear-gradient(180deg, #3D5FDD 0%, #5B7FFF 35%, #7C6FD4 65%, #AA5FFF 100%);
+    position:relative;
+  }
+
+  /* Decoração de fundo */
+  .bg-circle {
+    position:absolute; border-radius:50%;
+    background:rgba(255,255,255,.06); pointer-events:none;
+  }
+  .bc1 { width:500px;height:500px; top:-150px;right:-100px; }
+  .bc2 { width:300px;height:300px; bottom:200px;left:-80px; }
+  .bc3 { width:200px;height:200px; bottom:400px;right:50px; }
+
+  /* Status bar */
+  .status {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:18px 40px 0;
+    font-size:26px; font-weight:700; color:rgba(255,255,255,.9);
+    position:relative; z-index:10;
+  }
+
+  /* Top bar */
+  .top-bar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:24px 40px 0;
+  }
+  .back-btn { font-size:28px; color:rgba(255,255,255,.8); font-weight:700; }
+  .top-title { font-size:32px; font-weight:800; color:#fff; }
+  .lives { font-size:36px; letter-spacing:4px; }
+
+  /* Progress section */
+  .progress-section { padding:32px 40px 0; }
+
+  .progress-labels {
+    display:flex; justify-content:space-between; margin-bottom:12px;
+  }
+  .prog-label { font-size:24px; font-weight:700; color:rgba(255,255,255,.8); }
+
+  .prog-bar {
+    height:20px; background:rgba(255,255,255,.2);
+    border-radius:20px; overflow:hidden;
+  }
+  .prog-fill {
+    height:100%; width:35%;
+    background:linear-gradient(90deg,#FFD93D,#FFB800);
+    border-radius:20px;
+    box-shadow:0 0 20px rgba(255,184,0,.5);
+  }
+
+  /* Score */
+  .score-row {
+    display:flex; justify-content:center; gap:40px;
+    padding:28px 40px 0;
+  }
+  .score-chip {
+    background:rgba(255,255,255,.15);
+    border:1.5px solid rgba(255,255,255,.25);
+    border-radius:20px;
+    padding:12px 28px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .score-chip-icon { font-size:28px; }
+  .score-chip-val  { font-size:30px; font-weight:800; color:#FFD93D; }
+  .score-chip-lbl  { font-size:20px; font-weight:700; color:rgba(255,255,255,.7); }
+
+  /* Question card */
+  .question-card {
+    margin:48px 40px 0;
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(10px);
+    border:2px solid rgba(255,255,255,.25);
+    border-radius:40px;
+    padding:60px 40px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .question-card::before {
+    content:'';
+    position:absolute; top:0;left:0;right:0;bottom:0;
+    background:linear-gradient(180deg,rgba(255,255,255,.05),transparent);
+    border-radius:40px;
+  }
+
+  .question-hint {
+    font-size:26px; font-weight:700; color:rgba(255,255,255,.7);
+    margin-bottom:20px;
+  }
+
+  .question-text {
+    font-size:120px; font-weight:900; color:#fff;
+    line-height:1;
+    text-shadow: 0 4px 20px rgba(0,0,0,.3);
+  }
+
+  .question-sub {
+    font-size:32px; font-weight:700; color:rgba(255,255,255,.6);
+    margin-top:16px;
+  }
+
+  /* Timer */
+  .timer-section {
+    display:flex; align-items:center; justify-content:center; gap:20px;
+    margin-top:48px;
+  }
+  .timer-circle {
+    width:100px; height:100px;
+    background:rgba(255,255,255,.15);
+    border:4px solid #FFD93D;
+    border-radius:50%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    box-shadow:0 0 30px rgba(255,184,0,.4);
+  }
+  .timer-num  { font-size:38px; font-weight:900; color:#FFD93D; line-height:1; }
+  .timer-lbl  { font-size:16px; font-weight:700; color:rgba(255,255,255,.7); }
+  .timer-text { font-size:26px; font-weight:700; color:rgba(255,255,255,.7); }
+
+  /* Answer grid */
+  .answers {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:24px; padding:48px 40px 0;
+  }
+
+  .ans-btn {
+    padding:46px 20px;
+    border-radius:28px;
+    font-size:56px; font-weight:900;
+    text-align:center;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 8px 24px rgba(0,0,0,.2);
+    transition:transform .1s;
+  }
+  .ans-btn::after {
+    content:'';
+    position:absolute; top:0;left:0;right:0;
+    height:45%;
+    background:rgba(255,255,255,.12);
+    border-radius:28px 28px 0 0;
+  }
+  .ans-btn.a1 { background:linear-gradient(135deg,#FF6B6B,#FF9E9E); color:#fff; }
+  .ans-btn.a2 { background:linear-gradient(135deg,#5B7FFF,#8FA9FF); color:#fff; }
+  .ans-btn.a3 { background:linear-gradient(135deg,#FFD93D,#FFE87C); color:#2C3E50; }
+  .ans-btn.a4 { background:linear-gradient(135deg,#4CAF50,#81C784); color:#fff; }
+
+  .ans-letter {
+    position:absolute; top:14px; left:20px;
+    font-size:24px; font-weight:700; opacity:0.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-circle bc1"></div>
+<div class="bg-circle bc2"></div>
+<div class="bg-circle bc3"></div>
+
+<!-- Status bar -->
+<div class="status">
+  <span>9:41</span>
+  <div style="display:flex;gap:12px;align-items:center;font-size:24px;">
+    <span>📶</span><span>🔋</span>
+  </div>
+</div>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <div class="back-btn">← Sair</div>
+  <div class="top-title">⚡ Tabuada do 7</div>
+  <div class="lives">❤️❤️❤️</div>
+</div>
+
+<!-- Progress -->
+<div class="progress-section">
+  <div class="progress-labels">
+    <span class="prog-label">Questão 4 de 10</span>
+    <span class="prog-label">40%</span>
+  </div>
+  <div class="prog-bar"><div class="prog-fill"></div></div>
+</div>
+
+<!-- Score row -->
+<div class="score-row">
+  <div class="score-chip">
+    <span class="score-chip-icon">⭐</span>
+    <span class="score-chip-val">350</span>
+    <span class="score-chip-lbl">pts</span>
+  </div>
+  <div class="score-chip">
+    <span class="score-chip-icon">🔥</span>
+    <span class="score-chip-val">3</span>
+    <span class="score-chip-lbl">sequência</span>
+  </div>
+</div>
+
+<!-- Question card -->
+<div class="question-card">
+  <div class="question-hint">Quanto é...</div>
+  <div class="question-text">7 × 8 = ?</div>
+  <div class="question-sub">Escolha a resposta correta abaixo</div>
+</div>
+
+<!-- Timer -->
+<div class="timer-section">
+  <div class="timer-circle">
+    <div class="timer-num">12</div>
+    <div class="timer-lbl">seg</div>
+  </div>
+  <div class="timer-text">Pense rápido! ⏱️</div>
+</div>
+
+<!-- Answers -->
+<div class="answers">
+  <div class="ans-btn a1">
+    <span class="ans-letter">A</span>
+    42
+  </div>
+  <div class="ans-btn a2">
+    <span class="ans-letter">B</span>
+    63
+  </div>
+  <div class="ans-btn a3">
+    <span class="ans-letter">C</span>
+    48
+  </div>
+  <div class="ans-btn a4">
+    <span class="ans-letter">D</span>
+    56
+  </div>
+</div>
+
+</body>
+</html>

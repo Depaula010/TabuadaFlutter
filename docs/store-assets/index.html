@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet"/>
+<title>Store Assets – Mestres do Cálculo</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito',sans-serif;background:#F5F7FA;color:#2C3E50;padding:40px 24px 80px;}
+  h1{font-size:2rem;font-weight:900;margin-bottom:6px;}
+  .sub{font-size:1rem;color:#7F8C8D;margin-bottom:40px;}
+  .section-title{font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#7F8C8D;margin:32px 0 14px;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-bottom:16px;}
+  .card{background:#fff;border-radius:16px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.06);}
+  .card h3{font-size:1rem;font-weight:800;margin-bottom:6px;}
+  .card p{font-size:.85rem;color:#7F8C8D;margin-bottom:14px;}
+  .badge{display:inline-block;background:#EEF2FF;color:#5B7FFF;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:10px;margin-bottom:12px;}
+  a.btn{display:inline-block;background:linear-gradient(135deg,#5B7FFF,#AA5FFF);color:#fff;font-weight:800;font-size:.9rem;padding:10px 20px;border-radius:12px;text-decoration:none;}
+
+  .steps{background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:32px;}
+  .steps h2{font-size:1.15rem;font-weight:900;margin-bottom:16px;}
+  ol{padding-left:20px;}
+  ol li{margin-bottom:10px;font-size:.9rem;line-height:1.6;}
+  code{background:#EEF2FF;color:#5B7FFF;padding:2px 6px;border-radius:5px;font-size:.85rem;font-family:monospace;}
+</style>
+</head>
+<body>
+<h1>🏪 Store Assets</h1>
+<p class="sub">Mestres do Cálculo — recursos para publicação na Google Play Store</p>
+
+<div class="steps">
+  <h2>📸 Como exportar as imagens</h2>
+  <ol>
+    <li>Abra o arquivo desejado no <strong>Google Chrome</strong></li>
+    <li>Abra o DevTools: <code>F12</code> → aba <strong>Device Toolbar</strong> (<code>Ctrl+Shift+M</code>)</li>
+    <li>No campo de dimensões, digite exatamente <strong>1080 × 1920</strong> (screenshots) ou <strong>1024 × 500</strong> (feature graphic)</li>
+    <li>Zoom em <strong>100%</strong> (<code>Ctrl+Shift+P</code> → "Set zoom" → 100%)</li>
+    <li><code>Ctrl+Shift+P</code> → digite <strong>Capture screenshot</strong> → Enter</li>
+    <li>O PNG é salvo automaticamente em Downloads ✅</li>
+  </ol>
+</div>
+
+<div class="section-title">Feature Graphic — 1024 × 500 px</div>
+<div class="cards">
+  <div class="card">
+    <span class="badge">PNG/JPEG • 1024×500 • até 15 MB</span>
+    <h3>🎨 Feature Graphic</h3>
+    <p>Banner principal da Play Store. Aparece no topo da página do app.</p>
+    <a class="btn" href="feature_graphic.html" target="_blank">Abrir →</a>
+  </div>
+</div>
+
+<div class="section-title">Capturas de Tela — 1080 × 1920 px (9:16)</div>
+<div class="cards">
+  <div class="card">
+    <span class="badge">1080×1920 • Tela 1</span>
+    <h3>🏠 Tela Inicial</h3>
+    <p>Apresenta o app com progresso, personagem e botão de jogar.</p>
+    <a class="btn" href="screenshot_1_home.html" target="_blank">Abrir →</a>
+  </div>
+  <div class="card">
+    <span class="badge">1080×1920 • Tela 2</span>
+    <h3>📚 Seleção de Tabuada</h3>
+    <p>Grade com as tabuadas disponíveis, progresso e estrelas conquistadas.</p>
+    <a class="btn" href="screenshot_2_selection.html" target="_blank">Abrir →</a>
+  </div>
+  <div class="card">
+    <span class="badge">1080×1920 • Tela 3</span>
+    <h3>⚡ Tela do Jogo</h3>
+    <p>Questão de multiplicação com temporizador e 4 opções de resposta.</p>
+    <a class="btn" href="screenshot_3_game.html" target="_blank">Abrir →</a>
+  </div>
+  <div class="card">
+    <span class="badge">1080×1920 • Tela 4</span>
+    <h3>🏆 Troféus</h3>
+    <p>Galeria de conquistas ganhas e bloqueadas com pontuação.</p>
+    <a class="btn" href="screenshot_4_trophies.html" target="_blank">Abrir →</a>
+  </div>
+</div>
+</body>
+</html>

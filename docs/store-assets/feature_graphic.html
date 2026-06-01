@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    width: 1024px; height: 500px; overflow: hidden;
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #3D5FDD 0%, #5B7FFF 40%, #AA5FFF 100%);
+    position: relative;
+  }
+
+  /* Círculos decorativos de fundo */
+  .circle {
+    position: absolute; border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+  }
+  .c1 { width:320px; height:320px; top:-80px; right:60px; }
+  .c2 { width:200px; height:200px; bottom:-60px; right:200px; }
+  .c3 { width:150px; height:150px; top:40px; left:460px; }
+
+  /* Equações flutuantes */
+  .eq {
+    position: absolute;
+    font-size: 22px; font-weight: 800;
+    color: rgba(255,255,255,0.18);
+    transform: rotate(-15deg);
+  }
+  .eq.e1 { top:30px;  right:80px;  transform:rotate(12deg); font-size:28px; color:rgba(255,255,255,.22); }
+  .eq.e2 { top:160px; right:40px;  transform:rotate(-8deg); font-size:20px; }
+  .eq.e3 { bottom:50px; right:120px; transform:rotate(6deg); font-size:24px; }
+  .eq.e4 { top:60px; right:320px; transform:rotate(-12deg); font-size:18px; }
+  .eq.e5 { bottom:80px; right:300px; transform:rotate(10deg); }
+  .eq.e6 { top:200px; right:260px; transform:rotate(-5deg); font-size:26px; color:rgba(255,255,255,.25); }
+
+  /* Stars */
+  .star { position:absolute; color:rgba(255,255,255,0.35); font-size:28px; }
+  .s1 { top:20px; left:400px; }
+  .s2 { top:80px; left:620px; font-size:18px; }
+  .s3 { bottom:30px; left:350px; font-size:22px; }
+  .s4 { bottom:60px; left:550px; font-size:14px; }
+
+  /* Conteúdo principal – lado esquerdo */
+  .left {
+    position: absolute;
+    left: 64px; top: 0; bottom: 0;
+    width: 500px;
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 0;
+  }
+
+  .app-icon {
+    font-size: 70px;
+    line-height: 1;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,.25));
+  }
+
+  .app-name {
+    font-size: 54px;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.05;
+    text-shadow: 0 3px 10px rgba(0,0,0,0.25);
+    letter-spacing: -1px;
+  }
+
+  .tagline {
+    font-size: 22px;
+    font-weight: 700;
+    color: #FFE87C;
+    margin-top: 10px;
+    text-shadow: 0 2px 6px rgba(0,0,0,.2);
+  }
+
+  .badges {
+    display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap;
+  }
+  .badge {
+    background: rgba(255,255,255,0.18);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* Lado direito – visual */
+  .right {
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 400px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .phone-mockup {
+    width: 190px; height: 370px;
+    background: rgba(255,255,255,0.12);
+    border: 2.5px solid rgba(255,255,255,0.3);
+    border-radius: 30px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 14px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    padding: 20px;
+  }
+
+  .phone-question {
+    font-size: 32px; font-weight: 900; color: #fff;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(0,0,0,.2);
+  }
+
+  .phone-answers {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; width: 100%;
+  }
+
+  .ans {
+    padding: 10px 6px;
+    border-radius: 12px;
+    font-size: 18px; font-weight: 800;
+    text-align: center; color: #fff;
+    box-shadow: 0 3px 8px rgba(0,0,0,.2);
+  }
+  .ans.correct { background: #4CAF50; }
+  .ans.wrong1  { background: rgba(255,255,255,0.25); }
+  .ans.wrong2  { background: rgba(255,255,255,0.25); }
+  .ans.wrong3  { background: rgba(255,255,255,0.25); }
+
+  .stars-row { font-size: 22px; }
+
+  .trophy-big {
+    position: absolute;
+    font-size: 90px;
+    bottom: 20px; right: 20px;
+    filter: drop-shadow(0 6px 16px rgba(0,0,0,.3));
+    opacity: 0.9;
+  }
+</style>
+</head>
+<body>
+
+<div class="circle c1"></div>
+<div class="circle c2"></div>
+<div class="circle c3"></div>
+
+<span class="eq e1">7 × 8 = 56</span>
+<span class="eq e2">9 × 6 = 54</span>
+<span class="eq e3">4 × 7 = 28</span>
+<span class="eq e4">3 × 9 = 27</span>
+<span class="eq e5">6 × 6 = 36</span>
+<span class="eq e6">8 × 5 = 40</span>
+
+<span class="star s1">★</span>
+<span class="star s2">✦</span>
+<span class="star s3">★</span>
+<span class="star s4">✦</span>
+
+<div class="left">
+  <div class="app-icon">🧮</div>
+  <div class="app-name">Mestres do<br/>Cálculo</div>
+  <div class="tagline">Aprenda tabuada brincando! 🎯</div>
+  <div class="badges">
+    <span class="badge">100% Offline</span>
+    <span class="badge">6–12 anos</span>
+    <span class="badge">Gratuito</span>
+  </div>
+</div>
+
+<div class="right">
+  <div class="phone-mockup">
+    <div class="stars-row">⭐⭐⭐</div>
+    <div class="phone-question">7 × 8 = ?</div>
+    <div class="phone-answers">
+      <div class="ans wrong1">42</div>
+      <div class="ans correct">56 ✓</div>
+      <div class="ans wrong2">63</div>
+      <div class="ans wrong3">48</div>
+    </div>
+    <div style="font-size:13px;color:rgba(255,255,255,.7);font-weight:700;">Questão 7 de 10</div>
+  </div>
+  <div class="trophy-big">🏆</div>
+</div>
+
+</body>
+</html>

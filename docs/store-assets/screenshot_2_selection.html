@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    width:1080px; height:1920px; overflow:hidden;
+    font-family:'Nunito', sans-serif;
+    background: #F5F7FA;
+    position:relative;
+  }
+
+  /* Status bar */
+  .status {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:18px 40px 0;
+    font-size:26px; font-weight:700; color:#fff;
+    position:relative; z-index:10;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #5B7FFF, #AA5FFF);
+    padding: 20px 40px 60px;
+    position:relative; overflow:hidden;
+  }
+  .header::after {
+    content:'';
+    position:absolute; bottom:-30px; left:0; right:0; height:60px;
+    background:#F5F7FA;
+    border-radius:40px 40px 0 0;
+  }
+  .header-circle {
+    position:absolute; border-radius:50%;
+    background:rgba(255,255,255,.08);
+  }
+  .hc1 { width:300px;height:300px; top:-100px;right:-60px; }
+  .hc2 { width:200px;height:200px; bottom:0;left:200px; }
+
+  .back-btn {
+    font-size:28px; color:rgba(255,255,255,.8); margin-bottom:24px;
+    font-weight:700;
+  }
+
+  .header-title {
+    font-size:64px; font-weight:900; color:#fff;
+    line-height:1.1;
+  }
+  .header-sub {
+    font-size:28px; font-weight:700; color:rgba(255,255,255,.75);
+    margin-top:12px;
+  }
+
+  /* Progress summary */
+  .progress-bar-wrap {
+    margin-top:20px;
+    background:rgba(255,255,255,.25);
+    border-radius:20px; height:16px; overflow:hidden;
+  }
+  .progress-bar-fill {
+    height:100%; width:70%;
+    background:linear-gradient(90deg,#FFD93D,#FFB800);
+    border-radius:20px;
+  }
+  .progress-text {
+    font-size:22px; font-weight:700; color:rgba(255,255,255,.8);
+    margin-top:10px;
+  }
+
+  /* Grid */
+  .grid-title {
+    font-size:32px; font-weight:800; color:#7F8C8D;
+    padding:40px 40px 20px;
+    text-transform:uppercase; letter-spacing:2px;
+  }
+
+  .grid {
+    display:grid; grid-template-columns:repeat(2,1fr);
+    gap:24px; padding:0 32px;
+  }
+
+  .table-card {
+    background:#fff;
+    border-radius:28px;
+    padding:36px 28px;
+    display:flex; flex-direction:column;
+    gap:12px;
+    box-shadow:0 4px 20px rgba(0,0,0,.06);
+    position:relative;
+    overflow:hidden;
+    border:2px solid transparent;
+  }
+  .table-card.done  { border-color:#4CAF50; }
+  .table-card.active{ border-color:#5B7FFF; background:linear-gradient(135deg,#EEF2FF,#fff); }
+  .table-card.locked{ opacity:0.55; }
+
+  .card-accent {
+    position:absolute; top:0;right:0;
+    width:80px;height:80px;
+    border-radius:0 28px 0 80px;
+  }
+  .done .card-accent  { background:linear-gradient(135deg,#4CAF50,#81C784); }
+  .active .card-accent{ background:linear-gradient(135deg,#5B7FFF,#AA5FFF); }
+  .locked .card-accent{ background:#E0E0E0; }
+
+  .card-number {
+    font-size:80px; font-weight:900; line-height:1;
+  }
+  .done   .card-number { color:#2C3E50; }
+  .active .card-number { color:#5B7FFF; }
+  .locked .card-number { color:#BDBDBD; }
+
+  .card-label {
+    font-size:24px; font-weight:700; color:#7F8C8D;
+  }
+
+  .stars-row { font-size:36px; letter-spacing:4px; }
+
+  .card-tag {
+    display:inline-block;
+    font-size:20px; font-weight:800;
+    padding:6px 18px; border-radius:20px;
+    width:fit-content;
+  }
+  .done   .card-tag { background:#E8F5E9; color:#2E7D32; }
+  .active .card-tag { background:#EEF2FF; color:#5B7FFF; }
+  .locked .card-tag { background:#F5F5F5; color:#BDBDBD; }
+
+  .lock-icon {
+    position:absolute; top:20px; right:20px;
+    font-size:36px; opacity:0.5;
+  }
+
+  /* Bottom nav */
+  .nav {
+    position:absolute; bottom:0; left:0; right:0;
+    height:130px;
+    background:rgba(255,255,255,.95);
+    display:flex; align-items:center; justify-content:space-around;
+    border-top:1px solid rgba(0,0,0,.06);
+  }
+  .nav-item { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .nav-icon { font-size:44px; }
+  .nav-label { font-size:22px; font-weight:700; color:#7F8C8D; }
+  .nav-item.active .nav-label { color:#5B7FFF; }
+  .nav-dot { width:8px;height:8px;border-radius:50%;background:#5B7FFF;margin-top:2px; }
+</style>
+</head>
+<body>
+
+<!-- Header gradient -->
+<div class="header">
+  <div class="header-circle hc1"></div>
+  <div class="header-circle hc2"></div>
+  <div class="status">
+    <span>9:41</span>
+    <div style="display:flex;gap:12px;align-items:center;font-size:24px;">
+      <span>📶</span><span>🔋</span>
+    </div>
+  </div>
+  <div style="height:20px;"></div>
+  <div class="back-btn">← Início</div>
+  <div class="header-title">Escolha a<br/>Tabuada 📚</div>
+  <div class="header-sub">Qual você quer praticar hoje?</div>
+  <div style="height:16px;"></div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
+  <div class="progress-text">7 de 10 tabuadas concluídas 🎉</div>
+</div>
+
+<div class="grid-title">Selecionar Tabuada</div>
+
+<div class="grid">
+  <!-- Tabuada do 1 - concluída -->
+  <div class="table-card done">
+    <div class="card-accent"></div>
+    <div class="card-number">× 1</div>
+    <div class="card-label">Tabuada do 1</div>
+    <div class="stars-row">⭐⭐⭐</div>
+    <div class="card-tag">✓ Concluída</div>
+  </div>
+  <!-- Tabuada do 2 - concluída -->
+  <div class="table-card done">
+    <div class="card-accent"></div>
+    <div class="card-number">× 2</div>
+    <div class="card-label">Tabuada do 2</div>
+    <div class="stars-row">⭐⭐⭐</div>
+    <div class="card-tag">✓ Concluída</div>
+  </div>
+  <!-- Tabuada do 3 - concluída -->
+  <div class="table-card done">
+    <div class="card-accent"></div>
+    <div class="card-number">× 3</div>
+    <div class="card-label">Tabuada do 3</div>
+    <div class="stars-row">⭐⭐☆</div>
+    <div class="card-tag">✓ Concluída</div>
+  </div>
+  <!-- Tabuada do 4 - ativa/em progresso -->
+  <div class="table-card active">
+    <div class="card-accent"></div>
+    <div class="card-number">× 4</div>
+    <div class="card-label">Tabuada do 4</div>
+    <div class="stars-row">⭐☆☆</div>
+    <div class="card-tag">▶ Em andamento</div>
+  </div>
+  <!-- Tabuada do 5 - concluída -->
+  <div class="table-card done">
+    <div class="card-accent"></div>
+    <div class="card-number">× 5</div>
+    <div class="card-label">Tabuada do 5</div>
+    <div class="stars-row">⭐⭐⭐</div>
+    <div class="card-tag">✓ Concluída</div>
+  </div>
+  <!-- Tabuada do 6 - concluída -->
+  <div class="table-card done">
+    <div class="card-accent"></div>
+    <div class="card-number">× 6</div>
+    <div class="card-label">Tabuada do 6</div>
+    <div class="stars-row">⭐⭐☆</div>
+    <div class="card-tag">✓ Concluída</div>
+  </div>
+  <!-- Tabuada do 7 - bloqueada -->
+  <div class="table-card locked">
+    <div class="card-accent"></div>
+    <div class="lock-icon">🔒</div>
+    <div class="card-number">× 7</div>
+    <div class="card-label">Tabuada do 7</div>
+    <div class="stars-row">☆☆☆</div>
+    <div class="card-tag">Bloqueada</div>
+  </div>
+  <!-- Tabuada do 8 - bloqueada -->
+  <div class="table-card locked">
+    <div class="card-accent"></div>
+    <div class="lock-icon">🔒</div>
+    <div class="card-number">× 8</div>
+    <div class="card-label">Tabuada do 8</div>
+    <div class="stars-row">☆☆☆</div>
+    <div class="card-tag">Bloqueada</div>
+  </div>
+</div>
+
+<!-- Bottom nav -->
+<div class="nav">
+  <div class="nav-item">
+    <span class="nav-icon">🏠</span>
+    <span class="nav-label">Início</span>
+  </div>
+  <div class="nav-item active">
+    <span class="nav-icon">📚</span>
+    <span class="nav-label">Tabuadas</span>
+    <div class="nav-dot"></div>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">🏆</span>
+    <span class="nav-label">Troféus</span>
+  </div>
+  <div class="nav-item">
+    <span class="nav-icon">⚙️</span>
+    <span class="nav-label">Config</span>
+  </div>
+</div>
+
+</body>
+</html>
