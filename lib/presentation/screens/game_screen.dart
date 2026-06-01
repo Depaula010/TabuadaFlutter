@@ -204,38 +204,46 @@ class _GameScreenState extends State<GameScreen>
                           );
                         }
 
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Pontuação atual
-                            _buildScoreDisplay(provider),
+                        return LayoutBuilder(
+                          builder: (context, constraints) {
+                            final availH = constraints.maxHeight;
+                            final charH = (availH * 0.28).clamp(100.0, 190.0);
+                            final spacing = (availH * 0.025).clamp(8.0, 20.0);
 
-                            const SizedBox(height: 20),
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // Pontuação atual
+                                _buildScoreDisplay(provider),
 
-                            // Personagem reativo
-                            SizedBox(
-                              height: 200,
-                              child: Image.asset(
-                                _characterImage,
-                                key: ValueKey(_characterImage),
-                              ).animate(
-                                key: ValueKey(_characterImage),
-                              ).scale(
-                                duration: 300.ms,
-                                curve: Curves.easeOutBack,
-                              ),
-                            ),
+                                SizedBox(height: spacing),
 
-                            const SizedBox(height: 20),
+                                // Personagem reativo
+                                SizedBox(
+                                  height: charH,
+                                  child: Image.asset(
+                                    _characterImage,
+                                    key: ValueKey(_characterImage),
+                                  ).animate(
+                                    key: ValueKey(_characterImage),
+                                  ).scale(
+                                    duration: 300.ms,
+                                    curve: Curves.easeOutBack,
+                                  ),
+                                ),
 
-                            // Questão
-                            _buildQuestionDisplay(question.questionText),
+                                SizedBox(height: spacing),
 
-                            const SizedBox(height: 60),
+                                // Questão
+                                _buildQuestionDisplay(question.questionText),
 
-                            // Opções de resposta
-                            _buildAnswerOptions(context, question.options),
-                          ],
+                                SizedBox(height: spacing),
+
+                                // Opções de resposta
+                                _buildAnswerOptions(context, question.options),
+                              ],
+                            );
+                          },
                         );
                       },
                     ),
@@ -401,7 +409,7 @@ class _GameScreenState extends State<GameScreen>
 
   Widget _buildQuestionDisplay(String questionText) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
@@ -413,10 +421,13 @@ class _GameScreenState extends State<GameScreen>
           ),
         ],
       ),
-      child: Text(
-        questionText,
-        style: AppTextStyles.numberLarge,
-        textAlign: TextAlign.center,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          questionText,
+          style: AppTextStyles.numberLarge,
+          textAlign: TextAlign.center,
+        ),
       ),
     ).animate().fadeIn(duration: 400.ms).scale();
   }

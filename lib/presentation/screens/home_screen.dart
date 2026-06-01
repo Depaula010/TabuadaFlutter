@@ -18,6 +18,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final characterHeight = (screenHeight * 0.26).clamp(150.0, 230.0);
+    final topSpacing = (screenHeight * 0.035).clamp(12.0, 40.0);
+    final midSpacing = (screenHeight * 0.022).clamp(8.0, 24.0);
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -31,7 +36,7 @@ class HomeScreen extends StatelessWidget {
                 // Header com estatísticas
                 _buildHeader(),
 
-                const SizedBox(height: 40),
+                SizedBox(height: topSpacing),
 
                 // Personagem e título
                 Expanded(
@@ -40,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       // Personagem mascote
                       Container(
-                        height: 220,
+                        height: characterHeight,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           boxShadow: [
@@ -60,7 +65,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                       ),
 
-                      const SizedBox(height: 24),
+                      SizedBox(height: midSpacing),
 
                       Text(
                         'Mestres do Cálculo',

@@ -100,7 +100,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           const SizedBox(width: 16),
-          Text('Configurações', style: AppTextStyles.h2),
+          Expanded(
+            child: Text(
+              'Configurações',
+              style: AppTextStyles.h2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     );

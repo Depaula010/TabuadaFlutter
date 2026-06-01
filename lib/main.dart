@@ -43,6 +43,16 @@ class MestresDoCalculo extends StatelessWidget {
       child: MaterialApp(
         title: 'Mestres do Cálculo',
         debugShowCheckedModeBanner: false,
+        // Desabilita o font scaling do sistema para manter layout consistente
+        // em todos os dispositivos, independente das configurações de acessibilidade
+        builder: (context, child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+              textScaler: TextScaler.noScaling,
+            ),
+            child: child!,
+          );
+        },
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
