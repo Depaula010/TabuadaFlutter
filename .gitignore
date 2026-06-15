@@ -49,3 +49,6 @@ android/gradlew.bat
 
 # Sensitive logs
 build-log.txt
+
+# Node.js (screenshot tooling)
+node_modules/
